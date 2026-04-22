@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your ETF Profile – ClearWealth AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F8F6F1;--bg2:#FFFFFF;--bg3:#F0EDE6;
+  --text:#1C1A16;--text2:#6B6355;--text3:#A89E90;
+  --gold:#E8A820;--gold2:#F5BC38;--gold-dk:#B8820A;
+  --gold-bg:#FFF8E6;--gold-bd:#F5D478;
+  --green:#3A9E5C;--green2:#48BC6E;--green-bg:#EDFAF2;--green-bd:#90D4AC;
+  --blue:#3B7DD8;--blue-bg:#EEF4FF;--blue-bd:#B8D0F4;
+  --amber:#D4870A;--amber-bg:#FFF3E0;--amber-bd:#F5C878;
+  --border:#E4E0D8;--border2:#CCC8BE;
+  --shadow:0 2px 12px rgba(28,26,22,0.07);--shadow-lg:0 8px 40px rgba(28,26,22,0.12);
+  --r:14px;--rl:22px;--serif:'Nunito',sans-serif;--sans:'Plus Jakarta Sans',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;}
+nav{position:sticky;top:0;z-index:200;height:58px;background:rgba(248,246,241,0.97);backdrop-filter:blur(16px);border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;box-shadow:0 1px 4px rgba(28,26,22,0.05);}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-name{font-family:var(--serif);font-size:17px;font-weight:900;color:var(--text);}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nl{font-size:13px;font-weight:600;color:var(--text2);text-decoration:none;padding:6px 11px;border-radius:100px;transition:background 0.15s,color 0.15s;white-space:nowrap;}
+.nl:hover{background:var(--bg3);color:var(--text);}
+.nl.active{background:var(--gold-bg);color:var(--gold-dk);}
+.nav-cta{background:var(--gold);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;transition:transform 0.15s;}
+.nav-cta:hover{transform:translateY(-1px);}
+.burger{display:none;background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:18px;line-height:1;color:var(--text);}
+.mob-menu{display:none;position:fixed;top:58px;left:0;right:0;background:var(--bg2);border-bottom:1.5px solid var(--border);padding:1rem 1.25rem;z-index:199;box-shadow:var(--shadow-lg);flex-direction:column;gap:8px;}
+.mob-menu.open{display:flex;}
+.mob-link{font-size:14px;font-weight:600;color:var(--text2);text-decoration:none;padding:11px 14px;border-radius:12px;border:1.5px solid var(--border);display:flex;align-items:center;gap:10px;transition:background 0.15s;}
+.mob-link:hover,.mob-link.hl{background:var(--gold-bg);border-color:var(--gold-bd);color:var(--gold-dk);}
+@media(max-width:720px){.nav-links{display:none!important;}.burger{display:block;}}
+.quiz-wrap{flex:1;max-width:680px;margin:0 auto;padding:3rem 1.5rem 5rem;width:100%;}
+.prog-bar{background:var(--bg2);border-bottom:1.5px solid var(--border);padding:0.75rem 1.5rem;display:none;}
+.prog-inner{max-width:680px;margin:0 auto;}
+.prog-top{display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--text3);margin-bottom:7px;}
+.prog-track{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px;transition:width 0.5s ease;}
+.screen{display:none;}
+.screen.active{display:block;animation:fadeUp 0.35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.intro-badge{display:inline-flex;align-items:center;gap:7px;background:var(--gold-bg);border:1.5px solid var(--gold-bd);color:var(--gold-dk);font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:1.25rem;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.25;}}
+.intro h1{font-family:var(--serif);font-weight:900;font-size:clamp(2rem,5vw,2.8rem);line-height:1.15;margin-bottom:1rem;letter-spacing:-0.01em;}
+.hi{color:var(--gold);}
+.intro-p{font-size:15px;color:var(--text2);line-height:1.75;margin-bottom:2rem;max-width:520px;}
+.i-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem;}
+.i-stat{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;}
+.i-val{font-family:var(--serif);font-size:1.8rem;font-weight:900;color:var(--gold-dk);}
+.i-lbl{font-size:12px;color:var(--text2);margin-top:2px;}
+.btn-start{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:#fff;border:none;cursor:pointer;padding:14px 32px;border-radius:100px;font-family:var(--serif);font-size:15px;font-weight:900;box-shadow:0 3px 14px rgba(232,168,32,0.3);transition:transform 0.15s;}
+.btn-start:hover{transform:translateY(-2px);}
+.q-num{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.q-text{font-family:var(--serif);font-size:clamp(1.3rem,3.5vw,1.8rem);font-weight:900;line-height:1.3;margin-bottom:6px;}
+.q-hint{font-size:13px;color:var(--text3);margin-bottom:1.75rem;}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:1.75rem;}
+.option{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;cursor:pointer;transition:border-color 0.15s,background 0.15s,transform 0.15s;}
+.option:hover{border-color:var(--border2);transform:translateX(4px);}
+.option.sel{border-color:var(--gold);background:var(--gold-bg);}
+.opt-ico{font-size:22px;width:42px;height:42px;border-radius:10px;background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.option.sel .opt-ico{background:rgba(232,168,32,0.15);}
+.opt-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.opt-desc{font-size:12px;color:var(--text2);}
+.opt-chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.option.sel .opt-chk{border-color:var(--gold);background:var(--gold);}
+.opt-chk svg{opacity:0;transition:opacity 0.15s;}
+.option.sel .opt-chk svg{opacity:1;}
+.nav-btns{display:flex;gap:10px;}
+.btn-back{background:transparent;color:var(--text2);border:1.5px solid var(--border);cursor:pointer;padding:11px 22px;border-radius:100px;font-family:var(--sans);font-size:14px;font-weight:600;transition:border-color 0.15s;}
+.btn-back:hover{border-color:var(--border2);color:var(--text);}
+.btn-next{background:var(--text);color:var(--bg);border:none;cursor:pointer;padding:11px 28px;border-radius:100px;font-family:var(--sans);font-size:14px;font-weight:700;opacity:0.3;pointer-events:none;transition:background 0.15s,opacity 0.2s,transform 0.15s;}
+.btn-next.rdy{opacity:1;pointer-events:auto;}
+.btn-next.rdy:hover{background:var(--gold);transform:translateY(-1px);}
+.gate-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rl);padding:2rem;box-shadow:var(--shadow);}
+.gate-icon{width:52px;height:52px;border-radius:14px;background:var(--gold-bg);border:1.5px solid var(--gold-bd);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:1.25rem;}
+.gate-title{font-family:var(--serif);font-size:1.7rem;font-weight:900;margin-bottom:0.6rem;line-height:1.2;}
+.gate-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:1.5rem;}
+.gate-perks{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.gate-perk{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--text2);}
+.gate-perk-icon{width:30px;height:30px;border-radius:8px;background:var(--gold-bg);border:1.5px solid var(--gold-bd);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.gate-row{display:flex;gap:9px;margin-bottom:8px;}
+.gate-inp{flex:1;padding:12px 16px;background:var(--bg);border:1.5px solid var(--border);color:var(--text);border-radius:10px;font-family:var(--sans);font-size:14px;outline:none;transition:border-color 0.2s;}
+.gate-inp:focus{border-color:var(--gold);}
+.gate-inp::placeholder{color:var(--text3);}
+.gate-btn{background:var(--gold);color:#fff;border:none;cursor:pointer;padding:12px 22px;border-radius:10px;font-family:var(--sans);font-size:14px;font-weight:700;white-space:nowrap;transition:transform 0.15s;}
+.gate-btn:hover{transform:translateY(-1px);}
+.gate-err{font-size:12px;color:#E8443A;margin-top:5px;display:none;}
+.gate-note{font-size:11px;color:var(--text3);}
+.res-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:100px;font-size:13px;font-weight:700;border:1.5px solid;margin-bottom:1.25rem;}
+.res-title{font-family:var(--serif);font-size:clamp(1.8rem,5vw,2.4rem);font-weight:900;line-height:1.15;margin-bottom:0.75rem;}
+.res-desc{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:2rem;}
+.score-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1.25rem;}
+.score-row{margin-bottom:12px;}
+.score-row:last-child{margin-bottom:0;}
+.score-top{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--text2);}
+.score-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.score-fill{height:100%;border-radius:3px;transition:width 0.8s ease;}
+.etf-lbl{font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;}
+.etf-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:1.5rem;}
+.etf-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:1.1rem 1.25rem;display:flex;align-items:center;gap:1rem;text-decoration:none;color:var(--text);transition:border-color 0.15s,transform 0.15s;}
+.etf-card:hover{border-color:var(--gold-bd);transform:translateX(4px);}
+.etf-card.featured{border-color:var(--gold-bd);background:var(--gold-bg);}
+.etf-badge-w{position:relative;flex-shrink:0;}
+.etf-logo{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+.etf-star{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:9px;color:white;}
+.etf-name{font-size:14px;font-weight:700;margin-bottom:2px;}
+.etf-ticker{font-size:11px;color:var(--text3);font-family:monospace;margin-bottom:5px;}
+.etf-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.etf-tag{font-size:11px;padding:2px 8px;border-radius:100px;border:1px solid var(--border);color:var(--text2);}
+.etf-ret{font-size:15px;font-weight:700;color:var(--green);}
+.etf-ret-lbl{font-size:11px;color:var(--text3);}
+.etf-open{font-size:11px;color:var(--gold-dk);font-weight:600;margin-top:3px;}
+.broker-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem;}
+.broker-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:1.1rem;text-decoration:none;color:var(--text);transition:border-color 0.15s,transform 0.15s;}
+.broker-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.broker-card.top{border-color:var(--green-bd);}
+.broker-tag-g{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--green);background:var(--green-bg);padding:3px 9px;border-radius:100px;display:inline-block;margin-bottom:7px;}
+.broker-tag-b{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--blue);background:var(--blue-bg);padding:3px 9px;border-radius:100px;display:inline-block;margin-bottom:7px;}
+.broker-name{font-family:var(--serif);font-size:15px;font-weight:900;margin-bottom:8px;}
+.broker-feats{list-style:none;display:flex;flex-direction:column;gap:4px;}
+.broker-feats li{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:5px;}
+.broker-feats li::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.broker-cta{display:block;margin-top:8px;font-size:12px;font-weight:700;color:var(--green);}
+.aff-note{background:var(--bg3);border-radius:var(--r);padding:1rem;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:1.25rem;}
+.res-cta{width:100%;background:var(--gold);color:#fff;border:none;cursor:pointer;padding:14px;border-radius:100px;font-family:var(--serif);font-size:15px;font-weight:900;margin-bottom:10px;box-shadow:0 3px 14px rgba(232,168,32,0.3);transition:transform 0.15s;}
+.res-cta:hover{transform:translateY(-2px);}
+.restart-btn{width:100%;background:transparent;color:var(--text2);border:1.5px solid var(--border);cursor:pointer;padding:12px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:600;transition:all 0.15s;}
+.restart-btn:hover{border-color:var(--border2);color:var(--text);}
+.disclaimer{background:var(--bg3);border-top:1.5px solid var(--border);padding:1.5rem;text-align:center;}
+.disclaimer p{font-size:12px;color:var(--text3);line-height:1.7;max-width:760px;margin:0 auto;}
+footer{background:var(--text);padding:1.75rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;font-size:12px;color:rgba(255,255,255,0.3);}
+footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
+footer a:hover{color:rgba(255,255,255,0.65);}
+.flogo{font-family:var(--serif);font-size:15px;font-weight:900;color:#F0C96A;}
+@media(max-width:500px){.broker-cards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo"><div class="logo-icon">⚔️</div><div class="logo-name">Wealth Quest</div></a>
+  <div class="nav-links">
+    <a href="index.html" class="nl">🏠 Home</a>
+    <a href="clearwealthai-quiz.html" class="nl active">🎯 ETF Quiz</a>
+    <a href="wealth-quest.html" class="nl">⚔️ Play</a>
+    <a href="world-map.html" class="nl">🗺️ Map</a>
+    <a href="clearwealthai.html" class="nl">📊 Calculator</a>
+  </div>
+  <a href="index.html#signup" class="nav-cta">Join Waitlist</a>
+  <button class="burger" onclick="toggleMenu()" id="burger">☰</button>
+</nav>
+<div class="mob-menu" id="mob-menu">
+  <a href="index.html" class="mob-link"><span>🏠</span>Home</a>
+  <a href="clearwealthai-quiz.html" class="mob-link"><span>🎯</span>ETF Quiz</a>
+  <a href="wealth-quest.html" class="mob-link"><span>⚔️</span>Play</a>
+  <a href="world-map.html" class="mob-link"><span>🗺️</span>World Map</a>
+  <a href="clearwealthai.html" class="mob-link"><span>📊</span>Calculator</a>
+  <a href="index.html#signup" class="mob-link hl"><span>📋</span>Join Waitlist</a>
+</div>
+<div class="prog-bar" id="prog-bar">
+  <div class="prog-inner">
+    <div class="prog-top"><span id="q-ctr">Question 1 of 6</span><span id="q-pct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+</div>
+<div class="quiz-wrap">
+  <div class="screen active" id="screen-intro">
+    <div class="intro-badge"><span class="dot"></span>Free · 2 minutes · No sign-up needed yet</div>
+    <div class="intro">
+      <h1>Find your <span class="hi">perfect ETF profile.</span></h1>
+      <p class="intro-p">Answer 6 simple questions and get a personalised ETF strategy built for your goals, risk tolerance and timeline. Completely free.</p>
+      <div class="i-stats">
+        <div class="i-stat"><div class="i-val">6</div><div class="i-lbl">Questions</div></div>
+        <div class="i-stat"><div class="i-val">3</div><div class="i-lbl">Profiles</div></div>
+        <div class="i-stat"><div class="i-val">€0</div><div class="i-lbl">Cost</div></div>
+      </div>
+      <button class="btn-start" onclick="startQuiz()">Start the quiz <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <p style="font-size:12px;color:var(--text3);margin-top:1rem;">No financial advice. Educational purposes only.</p>
+    </div>
+  </div>
+  <div class="screen" id="screen-q"></div>
+  <div class="screen" id="screen-gate">
+    <div class="gate-card">
+      <div class="gate-icon">✉️</div>
+      <h2 class="gate-title">Your profile is almost ready.</h2>
+      <p class="gate-desc">Enter your email to unlock your personalised ETF strategy, including specific fund recommendations and broker suggestions.</p>
+      <div class="gate-perks">
+        <div class="gate-perk"><div class="gate-perk-icon">📊</div>Your personalised ETF profile</div>
+        <div class="gate-perk"><div class="gate-perk-icon">🏆</div>Top 3 ETF picks matched to your answers</div>
+        <div class="gate-perk"><div class="gate-perk-icon">📬</div>Weekly investing insights, free forever</div>
+      </div>
+      <div class="gate-row">
+        <input type="email" class="gate-inp" id="gate-email" placeholder="your@email.com">
+        <button class="gate-btn" onclick="revealResult()">See my profile</button>
+      </div>
+      <div class="gate-err" id="gate-err">Please enter a valid email address.</div>
+      <p class="gate-note">No spam. Unsubscribe anytime.</p>
+    </div>
+  </div>
+  <div class="screen" id="screen-result"></div>
+</div>
+<div class="disclaimer"><p><strong style="color:var(--text2);">Disclaimer:</strong> All content on ClearWealth AI is for educational and informational purposes only. Nothing here constitutes financial advice or a recommendation to buy or sell any financial instrument. Past performance is not a guarantee of future results. Investing involves risk. Some links may be affiliate links.</p></div>
+<footer>
+  <div class="flogo">⚔ ClearWealth AI</div>
+  <div><a href="index.html">Home</a> · <a href="clearwealthai.html">Calculator</a> · <a href="wealth-quest.html">Play</a> · <a href="#">Privacy</a> · <a href="#">Imprint</a></div>
+  <span>Not financial advice. Educational purposes only.</span>
+</footer>
+<script>
+function toggleMenu(){const m=document.getElementById('mob-menu');const b=document.getElementById('burger');m.classList.toggle('open');b.textContent=m.classList.contains('open')?'✕':'☰';}
+document.addEventListener('click',e=>{if(!e.target.closest('nav')&&!e.target.closest('.mob-menu'))document.getElementById('mob-menu').classList.remove('open');});
+const Q=[
+  {q:"What is your main financial goal?",h:"Think about what you want your money to do for you.",o:[
+    {i:"🛡️",t:"Protect what I have",d:"Keep my savings safe from inflation",s:{c:3,b:1,g:0}},
+    {i:"⚖️",t:"Balanced growth",d:"Grow steadily without too much risk",s:{c:1,b:3,g:1}},
+    {i:"🚀",t:"Maximum growth",d:"Build serious long-term wealth",s:{c:0,b:1,g:3}},
+    {i:"💸",t:"Passive income",d:"Receive regular dividend payouts",s:{c:2,b:2,g:1}}]},
+  {q:"Imagine your portfolio drops 20% in one month. How do you react?",h:"Be honest — this is key to finding your real risk tolerance.",o:[
+    {i:"😰",t:"I'd sell immediately",d:"I cannot handle seeing big losses",s:{c:3,b:1,g:0}},
+    {i:"😟",t:"I'd feel anxious but hold",d:"It would stress me out but I'd wait",s:{c:1,b:3,g:1}},
+    {i:"😌",t:"Stay calm and stay invested",d:"I trust the market recovers",s:{c:0,b:2,g:3}},
+    {i:"😄",t:"I'd buy more",d:"Dips are opportunities",s:{c:0,b:1,g:3}}]},
+  {q:"How long do you plan to keep your money invested?",h:"Longer timelines allow you to take on more risk.",o:[
+    {i:"📅",t:"Less than 3 years",d:"I may need this money soon",s:{c:3,b:1,g:0}},
+    {i:"🗓️",t:"3 to 7 years",d:"Medium-term horizon",s:{c:1,b:3,g:1}},
+    {i:"📆",t:"7 to 15 years",d:"Long-term planning",s:{c:0,b:2,g:3}},
+    {i:"♾️",t:"15 years or more",d:"Building generational wealth",s:{c:0,b:1,g:3}}]},
+  {q:"How much investing experience do you have?",h:"There are no wrong answers — we all start somewhere.",o:[
+    {i:"🌱",t:"Complete beginner",d:"I've never invested before",s:{c:2,b:2,g:1}},
+    {i:"📖",t:"Some knowledge",d:"I know the basics but haven't started",s:{c:1,b:2,g:2}},
+    {i:"📈",t:"A few investments",d:"I have a savings plan or ETF already",s:{c:1,b:2,g:2}},
+    {i:"🎓",t:"Experienced",d:"I regularly research and invest",s:{c:0,b:1,g:3}}]},
+  {q:"How much could you invest monthly right now?",h:"Even small amounts make a huge difference over time.",o:[
+    {i:"💶",t:"€25 to €50",d:"Just getting started",s:{c:2,b:2,g:1}},
+    {i:"💶",t:"€50 to €150",d:"Building a solid habit",s:{c:1,b:2,g:2}},
+    {i:"💶",t:"€150 to €500",d:"Serious about growing wealth",s:{c:0,b:2,g:3}},
+    {i:"💶",t:"€500 or more",d:"Ready to invest significantly",s:{c:0,b:1,g:3}}]},
+  {q:"What matters most to you in an investment?",h:"This helps us recommend the right ETF structure.",o:[
+    {i:"🔒",t:"Stability and safety",d:"Low volatility, predictable returns",s:{c:3,b:1,g:0}},
+    {i:"🌍",t:"Global diversification",d:"Spread risk across many countries",s:{c:1,b:3,g:2}},
+    {i:"⚡",t:"High growth potential",d:"I accept more swings for bigger returns",s:{c:0,b:1,g:3}},
+    {i:"🌱",t:"Sustainability (ESG)",d:"Invest according to my values",s:{c:1,b:2,g:2}}]}
+];
+const P={
+  conservative:{label:"Conservative",emoji:"🛡️",hex:"#3B7DD8",bg:"#EEF4FF",bd:"#B8D0F4",
+    title:"The Steady Builder.",titleColor:"#3B7DD8",
+    desc:"You value stability and peace of mind over chasing maximum returns. Your ideal portfolio focuses on low-volatility, globally diversified ETFs. You are building real wealth at your own pace.",
+    etfs:[
+      {n:"iShares Core MSCI World",tk:"IWDA",tags:["Global","Low cost","Diversified"],ret:"~8.1%",f:true,lb:"#EEF4FF",lc:"#3B7DD8"},
+      {n:"Xtrackers MSCI World",tk:"XDWD",tags:["Global","Accumulating"],ret:"~7.9%",f:false,lb:"#F0F4FF",lc:"#5A90DD"},
+      {n:"Vanguard FTSE All-World",tk:"VWRL",tags:["All-World","Distributing"],ret:"~7.6%",f:false,lb:"#F5F8FF",lc:"#3B7DD8"}
+    ],sc:"#3B7DD8"},
+  balanced:{label:"Balanced",emoji:"⚖️",hex:"#3A9E5C",bg:"#EDFAF2",bd:"#90D4AC",
+    title:"The Smart Allocator.",titleColor:"#3A9E5C",
+    desc:"You want real growth without losing sleep. A balanced portfolio gives you global exposure, solid historical returns and manageable volatility. Compound interest will reward your patience.",
+    etfs:[
+      {n:"Vanguard FTSE All-World",tk:"VWRL",tags:["All-World","Diversified","Top pick"],ret:"~8.4%",f:true,lb:"#EDFAF2",lc:"#3A9E5C"},
+      {n:"iShares MSCI World ESG",tk:"SASU",tags:["ESG","Sustainable"],ret:"~8.0%",f:false,lb:"#F0FAF4",lc:"#48BC6E"},
+      {n:"Amundi MSCI World II",tk:"CW8",tags:["Low TER","Accumulating"],ret:"~8.2%",f:false,lb:"#F5FDF8",lc:"#3A9E5C"}
+    ],sc:"#3A9E5C"},
+  growth:{label:"Growth",emoji:"🚀",hex:"#D4870A",bg:"#FFF3E0",bd:"#F5C878",
+    title:"The Bold Investor.",titleColor:"#D4870A",
+    desc:"You have the mindset and timeline to chase serious long-term wealth. Growth-focused ETFs give you higher upside. You know markets are volatile and you see dips as opportunities.",
+    etfs:[
+      {n:"iShares MSCI World Momentum",tk:"IWMO",tags:["Momentum","Growth","Top pick"],ret:"~10.3%",f:true,lb:"#FFF3E0",lc:"#D4870A"},
+      {n:"Invesco EQQQ NASDAQ-100",tk:"EQQQ",tags:["Tech-heavy","US growth"],ret:"~12.1%",f:false,lb:"#FFF8F0",lc:"#D4870A"},
+      {n:"iShares MSCI EM IMI",tk:"EMIM",tags:["Emerging markets","Diversified"],ret:"~6.8%",f:false,lb:"#FFFAF5",lc:"#B8820A"}
+    ],sc:"#D4870A"}
+};
+let ans=[],cur=0,sc={c:0,b:0,g:0};
+function startQuiz(){document.getElementById('prog-bar').style.display='block';showS('screen-q');renderQ(0);}
+function renderQ(i){
+  cur=i;updProg(i+1,Q.length);
+  const q=Q[i];
+  document.getElementById('screen-q').innerHTML=`
+    <div class="q-num">Question ${i+1} of ${Q.length}</div>
+    <h2 class="q-text">${q.q}</h2>
+    <p class="q-hint">${q.h}</p>
+    <div class="options" id="opts">
+      ${q.o.map((o,j)=>`<div class="option" onclick="selOpt(${j})" data-j="${j}">
+        <div class="opt-ico">${o.i}</div>
+        <div style="flex:1;"><div class="opt-title">${o.t}</div><div class="opt-desc">${o.d}</div></div>
+        <div class="opt-chk"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </div>`).join('')}
+    </div>
+    <div class="nav-btns">
+      ${i>0?`<button class="btn-back" onclick="goBack()">← Back</button>`:''}
+      <button class="btn-next" id="btn-next" onclick="goNext()">${i===Q.length-1?'See my result →':'Next →'}</button>
+    </div>`;
+  showS('screen-q');
+  if(ans[i]!==undefined)selOpt(ans[i]);
+}
+function selOpt(j){document.querySelectorAll('.option').forEach(o=>o.classList.remove('sel'));document.querySelectorAll('.option')[j].classList.add('sel');document.getElementById('btn-next').classList.add('rdy');ans[cur]=j;}
+function goNext(){if(ans[cur]===undefined)return;const s=Q[cur].o[ans[cur]].s;sc.c+=s.c;sc.b+=s.b;sc.g+=s.g;if(cur<Q.length-1)renderQ(cur+1);else{updProg(Q.length,Q.length);showS('screen-gate');}}
+function goBack(){if(cur>0){const s=Q[cur-1].o[ans[cur-1]].s;sc.c-=s.c;sc.b-=s.b;sc.g-=s.g;renderQ(cur-1);}}
+function revealResult(){
+  const email=document.getElementById('gate-email').value;
+  const err=document.getElementById('gate-err');
+  if(!email||!email.includes('@')){err.style.display='block';document.getElementById('gate-email').style.borderColor='#E8443A';return;}
+  err.style.display='none';document.getElementById('prog-bar').style.display='none';
+  renderResult();showS('screen-result');
+}
+function getProfile(){if(sc.c>=sc.b&&sc.c>=sc.g)return'conservative';if(sc.g>=sc.b&&sc.g>=sc.c)return'growth';return'balanced';}
+function renderResult(){
+  const k=getProfile();const p=P[k];
+  const tot=sc.c+sc.b+sc.g||1;
+  const pC=Math.round(sc.c/tot*100),pB=Math.round(sc.b/tot*100),pG=Math.round(sc.g/tot*100);
+  const etfH=p.etfs.map(e=>`
+    <a class="etf-card ${e.f?'featured':''}" href="#" onclick="return false;">
+      <div class="etf-badge-w">
+        <div class="etf-logo" style="background:${e.lb};color:${e.lc};">${e.tk.substring(0,2)}</div>
+        ${e.f?'<div class="etf-star">★</div>':''}
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div class="etf-name">${e.n}</div>
+        <div class="etf-ticker">${e.tk}</div>
+        <div class="etf-tags">${e.tags.map(t=>`<span class="etf-tag">${t}</span>`).join('')}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div class="etf-ret">${e.ret}</div>
+        <div class="etf-ret-lbl">avg/year</div>
+        <div class="etf-open">Open broker →</div>
+      </div>
+    </a>`).join('');
+  document.getElementById('screen-result').innerHTML=`
+    <div class="res-badge" style="color:${p.hex};background:${p.bg};border-color:${p.bd};">${p.emoji} Your profile: ${p.label}</div>
+    <h2 class="res-title" style="color:${p.titleColor};">${p.title}</h2>
+    <p class="res-desc">${p.desc}</p>
+    <div class="score-card">
+      <div class="score-row"><div class="score-top"><span>Conservative</span><span>${pC}%</span></div><div class="score-track"><div class="score-fill" style="width:${pC}%;background:#3B7DD8;"></div></div></div>
+      <div class="score-row"><div class="score-top"><span>Balanced</span><span>${pB}%</span></div><div class="score-track"><div class="score-fill" style="width:${pB}%;background:#3A9E5C;"></div></div></div>
+      <div class="score-row"><div class="score-top"><span>Growth</span><span>${pG}%</span></div><div class="score-track"><div class="score-fill" style="width:${pG}%;background:#D4870A;"></div></div></div>
+    </div>
+    <div class="etf-lbl">Recommended ETFs for your profile</div>
+    <div class="etf-cards">${etfH}</div>
+    <div class="etf-lbl">Where to buy these ETFs</div>
+    <div class="broker-cards">
+      <a class="broker-card top" href="#" onclick="return false;">
+        <span class="broker-tag-g">★ Recommended*</span>
+        <div class="broker-name">Trade Republic</div>
+        <ul class="broker-feats"><li>From €1 per month savings plan</li><li>All featured ETFs available</li><li>€0 order fees</li><li>German regulated</li></ul>
+        <span class="broker-cta">Open account free →</span>
+      </a>
+      <a class="broker-card" href="#" onclick="return false;">
+        <span class="broker-tag-b">Also great*</span>
+        <div class="broker-name">Scalable Capital</div>
+        <ul class="broker-feats"><li>Large ETF selection</li><li>Free plan available</li><li>Automated savings plans</li><li>EU-regulated broker</li></ul>
+        <span class="broker-cta">Open account free →</span>
+      </a>
+    </div>
+    <div class="aff-note">These ETFs are shown for educational purposes only. Past returns do not guarantee future results. Links marked * are affiliate links — you pay nothing extra but we may earn a small commission.</div>
+    <button class="res-cta" onclick="window.location.href='clearwealthai.html#calculator'">See how much you could earn →</button>
+    <button class="restart-btn" onclick="restartQuiz()">Retake the quiz</button>`;
+}
+function showS(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);el.classList.remove('active');void el.offsetWidth;el.classList.add('active');window.scrollTo(0,0);}
+function updProg(c,t){const pct=Math.round(c/t*100);document.getElementById('q-ctr').textContent=`Question ${c} of ${t}`;document.getElementById('q-pct').textContent=pct+'%';document.getElementById('prog-fill').style.width=pct+'%';}
+function restartQuiz(){ans=[];sc={c:0,b:0,g:0};cur=0;document.getElementById('prog-bar').style.display='none';showS('screen-intro');}
+</script>
+</body>
+</html>

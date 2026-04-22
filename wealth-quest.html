@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wealth Quest – ClearWealth AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0A0A08;
+  --bg2: #111110;
+  --bg3: #1A1A17;
+  --bg4: #222220;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #EDE8DC;
+  --text2: rgba(237,232,220,0.55);
+  --text3: rgba(237,232,220,0.3);
+  --gold: #D4A843;
+  --gold2: #F0C96A;
+  --gold-bg: rgba(212,168,67,0.12);
+  --gold-border: rgba(212,168,67,0.28);
+  --green: #3DB87A;
+  --green2: #5ED494;
+  --green-bg: rgba(61,184,122,0.1);
+  --green-border: rgba(61,184,122,0.25);
+  --blue: #4A90D9;
+  --blue-bg: rgba(74,144,217,0.1);
+  --purple: #8B6FD4;
+  --purple-bg: rgba(139,111,212,0.1);
+  --red: #D4544A;
+  --serif: 'Cinzel', Georgia, serif;
+  --sans: 'DM Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* SCREEN SYSTEM */
+.screen { display: none; }
+.screen.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.screen.active { animation: fadeIn 0.4s ease both; }
+
+/* ─── INTRO SCREEN ─── */
+#screen-intro {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 2rem; text-align: center;
+  background: var(--bg);
+  position: relative; overflow: hidden;
+}
+#screen-intro::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-conic-gradient(rgba(212,168,67,0.015) 0deg 1deg, transparent 1deg 90deg);
+  background-size: 60px 60px;
+}
+.intro-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--gold-bg); border: 1px solid var(--gold-border);
+  color: var(--gold2); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 6px 16px; border-radius: 100px; margin-bottom: 2rem;
+  position: relative;
+}
+.intro-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--gold); animation: glow 2s infinite; }
+@keyframes glow { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.intro-logo {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  letter-spacing: 0.05em;
+  color: var(--gold2);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+  position: relative;
+  text-shadow: 0 0 60px rgba(212,168,67,0.2);
+}
+.intro-sub-title {
+  font-family: var(--serif);
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  letter-spacing: 0.2em;
+  color: var(--text2);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+.intro-desc {
+  font-size: 15px; color: var(--text2); line-height: 1.75;
+  max-width: 480px; margin: 0 auto 2.5rem;
+  position: relative;
+}
+.intro-stats {
+  display: flex; gap: 2rem; justify-content: center;
+  margin-bottom: 2.5rem; flex-wrap: wrap; position: relative;
+}
+.intro-stat { text-align: center; }
+.intro-stat-val { font-family: var(--serif); font-size: 1.6rem; color: var(--gold2); }
+.intro-stat-lbl { font-size: 11px; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; }
+
+.btn-enter {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--gold); color: #1A1200;
+  border: none; cursor: pointer;
+  padding: 16px 40px; border-radius: 4px;
+  font-family: var(--serif); font-size: 14px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+  position: relative;
+}
+.btn-enter:hover { background: var(--gold2); transform: translateY(-2px); }
+
+/* ─── CHARACTER CREATION ─── */
+#screen-char {
+  min-height: 100vh;
+  padding: 3rem 1.5rem;
+  display: flex; flex-direction: column; align-items: center;
+}
+.char-title {
+  font-family: var(--serif); font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--gold2); text-align: center; margin-bottom: 0.5rem;
+  letter-spacing: 0.04em;
+}
+.char-sub { font-size: 14px; color: var(--text2); text-align: center; margin-bottom: 2.5rem; }
+.class-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px; width: 100%; max-width: 700px; margin-bottom: 2rem;
+}
+.class-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.5rem 1.25rem;
+  cursor: pointer; text-align: center;
+  transition: border-color 0.2s, transform 0.15s, background 0.2s;
+  position: relative; overflow: hidden;
+}
+.class-card::before {
+  content:''; position:absolute; inset:0; opacity:0; transition: opacity 0.2s;
+}
+.class-card:hover { transform: translateY(-4px); border-color: var(--border2); }
+.class-card.selected { border-color: var(--gold); }
+.class-card.selected::before { opacity: 1; background: var(--gold-bg); }
+.class-emblem { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.class-name { font-family: var(--serif); font-size: 15px; color: var(--gold2); margin-bottom: 0.4rem; letter-spacing: 0.04em; }
+.class-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.class-trait { font-size: 11px; color: var(--green2); margin-top: 0.5rem; font-weight: 500; }
+
+.name-section { width: 100%; max-width: 700px; margin-bottom: 2rem; }
+.field-label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+.name-input {
+  width: 100%; padding: 14px 18px;
+  background: var(--bg2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px;
+  font-family: var(--sans); font-size: 16px; outline: none;
+  transition: border-color 0.2s;
+}
+.name-input:focus { border-color: var(--gold-border); }
+.name-input::placeholder { color: var(--text3); }
+
+.btn-primary {
+  background: var(--gold); color: #1A1200;
+  border: none; cursor: pointer;
+  padding: 14px 36px; border-radius: 4px;
+  font-family: var(--serif); font-size: 13px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+  opacity: 1; pointer-events: auto;
+}
+.btn-primary.ready { opacity: 1; pointer-events: auto; }
+.btn-primary.ready:hover { background: var(--gold2); transform: translateY(-1px); }
+
+/* ─── MAIN GAME ─── */
+#screen-game { min-height: 100vh; }
+
+.game-header {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.game-logo { font-family: var(--serif); font-size: 16px; color: var(--gold2); letter-spacing: 0.06em; }
+
+.player-bar { display: flex; align-items: center; gap: 12px; }
+.player-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--gold-bg); border: 1px solid var(--gold-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.player-info { display: flex; flex-direction: column; }
+.player-name { font-size: 13px; font-weight: 500; line-height: 1.2; }
+.player-level { font-size: 11px; color: var(--gold); letter-spacing: 0.05em; }
+
+.xp-bar-wrap { width: 100px; }
+.xp-bar-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.xp-bar-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.6s ease; }
+.xp-label { font-size: 10px; color: var(--text3); margin-top: 2px; text-align: right; }
+
+.header-gold {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--serif); font-size: 14px; color: var(--gold2);
+}
+
+/* MAP */
+.game-body { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.world-banner {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 1.25rem;
+}
+.world-icon { font-size: 2.5rem; flex-shrink: 0; }
+.world-info h2 { font-family: var(--serif); font-size: 1.3rem; color: var(--gold2); letter-spacing: 0.04em; margin-bottom: 4px; }
+.world-info p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.world-progress { margin-top: 10px; }
+.wp-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-bottom: 5px; }
+.wp-track { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.wp-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.8s ease; }
+
+.quests-label {
+  font-family: var(--serif); font-size: 12px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text3); margin-bottom: 12px;
+}
+
+.quest-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.25rem 1.5rem;
+  margin-bottom: 10px; cursor: pointer;
+  display: flex; align-items: center; gap: 1rem;
+  transition: border-color 0.2s, transform 0.15s;
+  position: relative; overflow: hidden;
+}
+.quest-card:hover:not(.locked) { border-color: var(--gold-border); transform: translateX(4px); }
+.quest-card.locked { opacity: 0.45; cursor: not-allowed; }
+.quest-card.completed { border-color: var(--green-border); background: var(--bg3); }
+.quest-card.active { border-color: var(--gold-border); background: var(--gold-bg); }
+
+.quest-icon-wrap { position: relative; flex-shrink: 0; }
+.quest-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; background: var(--bg3);
+}
+.quest-card.active .quest-icon { background: var(--gold-bg); }
+.quest-card.completed .quest-icon { background: var(--green-bg); }
+.quest-lock-icon {
+  position: absolute; bottom: -2px; right: -2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--bg4); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 10px;
+}
+
+.quest-body { flex: 1; min-width: 0; }
+.quest-title { font-family: var(--serif); font-size: 14px; color: var(--text); letter-spacing: 0.02em; margin-bottom: 4px; }
+.quest-desc { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 6px; }
+.quest-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.qtag {
+  font-size: 11px; padding: 2px 8px; border-radius: 100px;
+  border: 1px solid var(--border); color: var(--text3);
+}
+.quest-card.active .qtag { border-color: var(--gold-border); color: var(--gold); }
+.quest-card.completed .qtag { border-color: var(--green-border); color: var(--green2); }
+
+.quest-reward { text-align: right; flex-shrink: 0; }
+.quest-xp { font-family: var(--serif); font-size: 15px; color: var(--gold2); }
+.quest-xp-lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+.quest-check { font-size: 20px; color: var(--green2); }
+
+/* ─── QUEST DETAIL ─── */
+#screen-quest { min-height: 100vh; }
+.quest-header-bar {
+  background: var(--bg2); border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem; display: flex; align-items: center; gap: 12px;
+}
+.btn-back-quest {
+  background: transparent; color: var(--text2); border: 1px solid var(--border);
+  padding: 7px 16px; border-radius: 100px; cursor: pointer;
+  font-family: var(--sans); font-size: 13px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btn-back-quest:hover { color: var(--text); border-color: var(--border2); }
+.quest-header-title { font-family: var(--serif); font-size: 15px; color: var(--gold2); letter-spacing: 0.04em; }
+
+.quest-body-wrap { max-width: 680px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.quest-mission-card {
+  background: var(--bg2); border: 1px solid var(--gold-border);
+  border-radius: 16px; padding: 1.5rem 1.75rem; margin-bottom: 1.5rem;
+}
+.qm-eyebrow { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+.qm-title { font-family: var(--serif); font-size: clamp(1.3rem, 4vw, 1.8rem); color: var(--gold2); margin-bottom: 0.75rem; letter-spacing: 0.03em; line-height: 1.3; }
+.qm-intro { font-size: 14px; color: var(--text2); line-height: 1.8; }
+
+.lesson-block {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.5rem; margin-bottom: 12px;
+}
+.lb-label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 0.75rem; }
+.lb-heading { font-family: var(--serif); font-size: 15px; color: var(--text); margin-bottom: 0.6rem; }
+.lb-body { font-size: 14px; color: var(--text2); line-height: 1.8; }
+.lb-highlight {
+  background: var(--gold-bg); border: 1px solid var(--gold-border);
+  border-radius: 10px; padding: 0.9rem 1.1rem; margin: 1rem 0;
+  font-size: 13px; color: var(--gold2); line-height: 1.6;
+}
+.lb-example {
+  background: var(--bg3); border-radius: 10px; padding: 1rem;
+  margin: 1rem 0; font-size: 13px; color: var(--text2);
+}
+.lb-example strong { color: var(--text); }
+
+/* QUIZ IN QUEST */
+.quest-quiz { margin-top: 1.5rem; }
+.qq-question { font-family: var(--serif); font-size: 16px; color: var(--text); margin-bottom: 1rem; line-height: 1.4; }
+.qq-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+.qq-opt {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 0.9rem 1.1rem;
+  cursor: pointer; font-size: 14px; color: var(--text2);
+  transition: border-color 0.2s, background 0.2s;
+  display: flex; align-items: center; gap: 10px;
+}
+.qq-opt:hover { border-color: var(--border2); color: var(--text); }
+.qq-opt.correct { border-color: var(--green); background: var(--green-bg); color: var(--green2); }
+.qq-opt.wrong { border-color: var(--red); background: rgba(212,84,74,0.08); color: #E07070; }
+.qq-opt.selected { border-color: var(--gold-border); background: var(--gold-bg); color: var(--gold2); }
+.qq-opt-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid currentColor; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; }
+.qq-feedback {
+  border-radius: 10px; padding: 1rem 1.1rem;
+  font-size: 13px; line-height: 1.6; margin-bottom: 1rem; display: none;
+}
+.qq-feedback.correct { background: var(--green-bg); color: var(--green2); border: 1px solid var(--green-border); }
+.qq-feedback.wrong { background: rgba(212,84,74,0.08); color: #E07070; border: 1px solid rgba(212,84,74,0.2); }
+
+/* COMPLETE BUTTON */
+.complete-section { text-align: center; margin-top: 2rem; }
+.xp-reward-preview {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--serif); font-size: 14px; color: var(--gold2);
+  background: var(--gold-bg); border: 1px solid var(--gold-border);
+  padding: 8px 20px; border-radius: 100px; margin-bottom: 1rem;
+}
+.btn-complete {
+  display: block; width: 100%;
+  background: var(--gold); color: #1A1200;
+  border: none; cursor: pointer;
+  padding: 15px; border-radius: 8px;
+  font-family: var(--serif); font-size: 14px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.15s;
+  opacity: 0.3; pointer-events: none;
+}
+.btn-complete.ready { opacity: 1; pointer-events: auto; }
+.btn-complete.ready:hover { background: var(--gold2); transform: translateY(-1px); }
+
+/* ─── LEVEL UP SCREEN ─── */
+#screen-levelup {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 3rem 1.5rem; text-align: center;
+}
+.lu-particles { font-size: 2.5rem; margin-bottom: 1rem; animation: bounce 0.6s ease infinite alternate; }
+@keyframes bounce { from{transform:translateY(0);} to{transform:translateY(-10px);} }
+.lu-title { font-family: var(--serif); font-size: clamp(1.8rem, 5vw, 3rem); color: var(--gold2); margin-bottom: 0.5rem; letter-spacing: 0.04em; }
+.lu-sub { font-size: 14px; color: var(--text2); margin-bottom: 2rem; }
+.lu-rewards {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem;
+}
+.lu-reward {
+  background: var(--bg2); border: 1px solid var(--gold-border);
+  border-radius: 12px; padding: 1rem 1.25rem; text-align: center; min-width: 120px;
+}
+.lu-reward-val { font-family: var(--serif); font-size: 1.4rem; color: var(--gold2); }
+.lu-reward-lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+.lu-newsletter {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.5rem; max-width: 480px; width: 100%; margin-bottom: 2rem;
+}
+.lu-nl-title { font-family: var(--serif); font-size: 15px; color: var(--gold2); margin-bottom: 0.5rem; }
+.lu-nl-desc { font-size: 13px; color: var(--text2); margin-bottom: 1rem; line-height: 1.6; }
+.lu-email-row { display: flex; gap: 8px; }
+.lu-email-input {
+  flex: 1; padding: 11px 14px;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px;
+  font-family: var(--sans); font-size: 14px; outline: none;
+  transition: border-color 0.2s;
+}
+.lu-email-input:focus { border-color: var(--gold-border); }
+.lu-email-input::placeholder { color: var(--text3); }
+.lu-sub-btn {
+  background: var(--gold); color: #1A1200;
+  border: none; cursor: pointer; white-space: nowrap;
+  padding: 11px 20px; border-radius: 8px;
+  font-family: var(--serif); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  transition: background 0.15s;
+}
+.lu-sub-btn:hover { background: var(--gold2); }
+
+/* XP TOAST */
+.xp-toast {
+  position: fixed; top: 80px; right: 20px; z-index: 999;
+  background: var(--bg2); border: 1px solid var(--gold-border);
+  border-radius: 12px; padding: 0.75rem 1.25rem;
+  font-family: var(--serif); font-size: 15px; color: var(--gold2);
+  display: flex; align-items: center; gap: 8px;
+  animation: toastIn 0.4s ease, toastOut 0.4s ease 2.2s both;
+  pointer-events: none;
+}
+@keyframes toastIn { from{opacity:0;transform:translateX(20px);} to{opacity:1;transform:translateX(0);} }
+@keyframes toastOut { to{opacity:0;transform:translateX(20px);} }
+
+@media (max-width: 600px) {
+  .class-grid { grid-template-columns: 1fr 1fr; }
+  .game-header .xp-bar-wrap { display: none; }
+  .world-banner { flex-direction: column; text-align: center; }
+}
+
+.cw-game-nav{position:fixed;top:0;left:0;right:0;z-index:300;height:56px;background:rgba(10,10,8,0.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;}
+.cw-game-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.cw-game-logo-icon{width:32px;height:32px;border-radius:8px;background:#E8A820;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.cw-game-logo-name{font-family:Cinzel,serif;font-size:15px;font-weight:700;color:#F0C96A;letter-spacing:0.04em;}
+.cw-game-nl{font-size:12px;font-weight:600;color:rgba(237,232,220,0.5);text-decoration:none;padding:5px 9px;border-radius:100px;transition:background 0.15s;white-space:nowrap;}
+.cw-game-nl:hover{background:rgba(255,255,255,0.07);color:#EDE8DC;}
+.cw-game-nl.active{background:rgba(212,168,67,0.15);color:#F0C96A;}
+.cw-game-cta{background:#E8A820;color:#1A1200;border:none;cursor:pointer;padding:7px 14px;border-radius:100px;font-family:Cinzel,serif;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:0.04em;}
+.cw-game-burger{display:none;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:7px;padding:5px 9px;cursor:pointer;font-size:17px;color:#EDE8DC;}
+.cw-game-mob{display:none;position:fixed;top:56px;left:0;right:0;background:#0F0F0C;border-bottom:1px solid rgba(255,255,255,0.07);padding:0.9rem;z-index:299;flex-direction:column;gap:7px;}
+.cw-game-mob.open{display:flex;}
+.cw-game-mob-link{font-size:13px;font-weight:600;color:rgba(237,232,220,0.55);text-decoration:none;padding:10px 13px;border-radius:10px;border:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:9px;transition:background 0.15s;}
+.cw-game-mob-link:hover,.cw-game-mob-link.hl{background:rgba(212,168,67,0.1);border-color:rgba(212,168,67,0.25);color:#F0C96A;}
+@media(max-width:700px){.cw-game-nl{display:none!important;}.cw-game-burger{display:block;}}
+</style>
+</head>
+<body>
+<nav class="cw-game-nav">
+  <a href="index.html" class="cw-game-logo">
+    <div class="cw-game-logo-icon">⚔️</div>
+    <div class="cw-game-logo-name">Wealth Quest</div>
+  </a>
+  <div style="display:flex;align-items:center;gap:2px;">
+    <a href="index.html" class="cw-game-nl">🏠 Home</a>
+    <a href="clearwealthai-quiz.html" class="cw-game-nl">🎯 ETF Quiz</a>
+    <a href="wealth-quest.html" class="cw-game-nl active">⚔️ Play</a>
+    <a href="world-map.html" class="cw-game-nl">🗺️ Map</a>
+    <a href="clearwealthai.html" class="cw-game-nl">📊 Calculator</a>
+  </div>
+  <a href="index.html#signup" class="cw-game-cta">Join Waitlist</a>
+  <button class="cw-game-burger" onclick="cwgToggle()" id="cwgb">☰</button>
+</nav>
+<div class="cw-game-mob" id="cwgm">
+  <a href="index.html" class="cw-game-mob-link"><span>🏠</span>Home</a>
+  <a href="clearwealthai-quiz.html" class="cw-game-mob-link"><span>🎯</span>ETF Quiz</a>
+  <a href="wealth-quest.html" class="cw-game-mob-link"><span>⚔️</span>Play</a>
+  <a href="world-map.html" class="cw-game-mob-link"><span>🗺️</span>World Map</a>
+  <a href="clearwealthai.html" class="cw-game-mob-link"><span>📊</span>Calculator</a>
+  <a href="index.html#signup" class="cw-game-mob-link hl"><span>📋</span>Join Waitlist</a>
+</div>
+
+<!-- ═══ SCREEN: INTRO ═══ -->
+<div class="screen active" id="screen-intro">
+  <div class="intro-badge"><span></span>ClearWealth AI · Beta</div>
+  <div class="intro-logo">WEALTH QUEST</div>
+  <div class="intro-sub-title">Master Your Financial Future</div>
+  <p class="intro-desc">The world's first RPG where leveling up means learning to invest. Complete quests, earn XP, and build real wealth — one mission at a time.</p>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="intro-stat-val">5</div><div class="intro-stat-lbl">Quests</div></div>
+    <div class="intro-stat"><div class="intro-stat-val">∞</div><div class="intro-stat-lbl">Levels</div></div>
+    <div class="intro-stat"><div class="intro-stat-val">$0</div><div class="intro-stat-lbl">To start</div></div>
+  </div>
+  <button class="btn-enter" onclick="showScreen('screen-char')">
+    Begin Your Journey
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+</div>
+
+<!-- ═══ SCREEN: CHARACTER CREATION ═══ -->
+<div class="screen" id="screen-char">
+  <div style="max-width:720px; margin:0 auto; padding:3rem 1.5rem;">
+    <h1 class="char-title">Choose Your Class</h1>
+    <p class="char-sub">Your class shapes your investing style. You can always change later.</p>
+
+    <div class="class-grid">
+      <div class="class-card" onclick="selectClass(this,'🛡️','The Guardian')" data-class="Guardian">
+        <div class="class-emblem">🛡️</div>
+        <div class="class-name">The Guardian</div>
+        <div class="class-desc">Slow and steady. You protect your wealth before chasing big returns.</div>
+        <div class="class-trait">+ Bonus XP on risk management quests</div>
+      </div>
+      <div class="class-card" onclick="selectClass(this,'⚖️','The Strategist')" data-class="Strategist">
+        <div class="class-emblem">⚖️</div>
+        <div class="class-name">The Strategist</div>
+        <div class="class-desc">Balanced growth with calculated risks. The most popular class.</div>
+        <div class="class-trait">+ Bonus XP on portfolio quests</div>
+      </div>
+      <div class="class-card" onclick="selectClass(this,'🚀','The Trailblazer')" data-class="Trailblazer">
+        <div class="class-emblem">🚀</div>
+        <div class="class-name">The Trailblazer</div>
+        <div class="class-desc">High risk, high reward. You chase aggressive long-term growth.</div>
+        <div class="class-trait">+ Bonus XP on growth quests</div>
+      </div>
+    </div>
+
+    <div class="name-section">
+      <div class="field-label">Your adventurer name</div>
+      <input type="text" class="name-input" id="char-name" placeholder="e.g. WealthSeeker42" oninput="checkCharReady()" maxlength="24">
+    </div>
+
+    <button class="btn-primary ready" id="btn-start-game" onclick="startGame()">Enter the World →</button>
+  </div>
+</div>
+
+<!-- ═══ SCREEN: GAME MAP ═══ -->
+<div class="screen" id="screen-game">
+  <header class="game-header">
+    <div class="game-logo">⚔ Wealth Quest</div>
+    <div class="player-bar">
+      <div class="player-avatar" id="hdr-avatar">🛡️</div>
+      <div class="player-info">
+        <div class="player-name" id="hdr-name">Hero</div>
+        <div class="player-level" id="hdr-level">Level 1 · Novice</div>
+      </div>
+      <div class="xp-bar-wrap">
+        <div class="xp-bar-track"><div class="xp-bar-fill" id="xp-fill" style="width:0%"></div></div>
+        <div class="xp-label" id="xp-label">0 / 100 XP</div>
+      </div>
+    </div>
+    <div class="header-gold">🪙 <span id="hdr-gold">0</span></div>
+  </header>
+
+  <div class="game-body">
+    <div style="display:flex;justify-content:flex-end;padding:0 1.5rem 0.5rem;">
+      <a href="world-map.html" style="display:inline-flex;align-items:center;gap:8px;background:rgba(212,168,67,0.12);border:1.5px solid rgba(212,168,67,0.3);color:#F0C96A;font-size:13px;font-weight:700;padding:8px 18px;border-radius:100px;text-decoration:none;transition:background 0.15s;">
+        🗺️ View World Map
+      </a>
+    </div>
+    <div class="world-banner">
+      <div class="world-icon">🗺️</div>
+      <div class="world-info" style="flex:1;">
+        <h2>The ETF Highlands — Chapter I</h2>
+        <p>The first region of your wealth journey. Master the basics of ETFs, compound interest, and long-term thinking. Five quests stand between you and the next chapter.</p>
+        <div class="world-progress">
+          <div class="wp-label"><span>Chapter Progress</span><span id="chapter-pct">0 / 5 quests</span></div>
+          <div class="wp-track"><div class="wp-fill" id="chapter-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quests-label">Active Quests</div>
+    <div id="quest-list"></div>
+  </div>
+</div>
+
+<!-- ═══ SCREEN: QUEST DETAIL ═══ -->
+<div class="screen" id="screen-quest">
+  <div class="quest-header-bar">
+    <button class="btn-back-quest" onclick="showScreen('screen-game')">← Map</button>
+    <div class="quest-header-title" id="quest-hdr-title">Quest</div>
+  </div>
+  <div class="quest-body-wrap" id="quest-content"></div>
+</div>
+
+<!-- ═══ SCREEN: LEVEL UP ═══ -->
+<div class="screen" id="screen-levelup">
+  <div class="lu-particles" id="lu-particles">🎉</div>
+  <div class="lu-title" id="lu-title">Quest Complete!</div>
+  <div class="lu-sub" id="lu-sub">You've mastered a new concept.</div>
+  <div class="lu-rewards" id="lu-rewards"></div>
+
+  <div class="lu-newsletter" id="lu-newsletter" style="display:none;">
+    <div class="lu-nl-title">🗞 Unlock the Weekly Guild Dispatch</div>
+    <div class="lu-nl-desc">Get one investing insight every week — written like a quest briefing. Free for active players.</div>
+    <div class="lu-email-row">
+      <input type="email" class="lu-email-input" placeholder="your@email.com" id="lu-email">
+      <button class="lu-sub-btn" onclick="handleNewsletterSignup()">Subscribe</button>
+    </div>
+  </div>
+
+  <button class="btn-primary ready" onclick="returnToMap()" style="padding:14px 36px;">Continue →</button>
+    <a href="world-map.html" style="display:block;text-align:center;margin-top:12px;color:rgba(240,201,106,0.6);font-size:13px;text-decoration:none;">🗺️ Explore the World Map</a>
+</div>
+
+<script>
+const QUESTS = [
+  {
+    id: 1,
+    title: "What is an ETF?",
+    icon: "📦",
+    desc: "Learn what ETFs are and why they're the most powerful tool for everyday investors.",
+    tags: ["ETF Basics", "5 min"],
+    xp: 50,
+    gold: 10,
+    lesson: {
+      heading: "Why ETFs beat picking stocks",
+      intro: "Imagine you want to invest in the global economy — but you can't afford to buy shares in hundreds of companies. An ETF solves this beautifully.",
+      blocks: [
+        {
+          label: "The concept",
+          heading: "What exactly is an ETF?",
+          body: "ETF stands for Exchange Traded Fund. It's a basket of many stocks or bonds bundled into a single investment you can buy like a regular share. One purchase — instant diversification across hundreds or thousands of companies.",
+          highlight: "One MSCI World ETF gives you exposure to 1,600+ companies across 23 countries — for as little as €1/month.",
+          example: "<strong>Example:</strong> Instead of buying Apple, Microsoft, and Amazon separately, one S&P 500 ETF holds all of them — plus 497 more companies."
+        },
+        {
+          label: "Why it matters",
+          heading: "ETFs vs. picking single stocks",
+          body: "Most professional fund managers fail to beat the market long-term. Individual stock pickers do even worse. ETFs don't try to beat the market — they simply track it. And historically, that beats 90% of active strategies.",
+          highlight: "Warren Buffett's advice for most investors: put your money in a low-cost index ETF and leave it alone.",
+          example: "<strong>Stats:</strong> Over 15 years, 88% of active fund managers underperformed a simple index ETF."
+        }
+      ],
+      quiz: {
+        question: "What is the main advantage of an ETF over picking individual stocks?",
+        options: [
+          { text: "ETFs always guarantee higher returns", correct: false },
+          { text: "ETFs provide instant diversification at low cost", correct: true },
+          { text: "ETFs only invest in tech companies", correct: false },
+          { text: "ETFs are only for professional investors", correct: false }
+        ],
+        correctFeedback: "Correct! Diversification is the superpower of ETFs. You spread risk across hundreds of companies automatically.",
+        wrongFeedback: "Not quite. The key benefit is diversification — instant exposure to many companies with a single purchase."
+      }
+    }
+  },
+  {
+    id: 2,
+    title: "Accumulating vs. Distributing",
+    icon: "🔄",
+    desc: "Understand the difference between reinvesting dividends and taking them as cash.",
+    tags: ["ETF Types", "5 min"],
+    xp: 60,
+    gold: 12,
+    lesson: {
+      heading: "Accumulating vs. Distributing ETFs",
+      intro: "When a company in your ETF pays dividends, your ETF has to do something with that money. The answer shapes how your wealth grows.",
+      blocks: [
+        {
+          label: "Type 1",
+          heading: "Accumulating ETFs (Thesaurierend)",
+          body: "Accumulating ETFs automatically reinvest dividends back into the fund. You never see the cash — but your shares grow in value. This is the power of compound interest working silently for you.",
+          highlight: "For long-term wealth building, accumulating ETFs are almost always the better choice. Compound interest multiplies silently.",
+          example: "<strong>Example:</strong> €10,000 in an accumulating ETF at 7%/year = €76,000 after 30 years. Same money in distributing = you'd need discipline to reinvest manually."
+        },
+        {
+          label: "Type 2",
+          heading: "Distributing ETFs (Ausschüttend)",
+          body: "Distributing ETFs pay dividends directly into your account as cash. Great if you need regular income — for example, in retirement. But if you reinvest manually, you may owe tax on each payout.",
+          highlight: "In Germany and most EU countries, receiving dividends triggers immediate tax. Accumulating ETFs defer this — a major long-term advantage.",
+          example: "<strong>Best for:</strong> Accumulating = younger investors building wealth. Distributing = retirees who need regular income."
+        }
+      ],
+      quiz: {
+        question: "For a 25-year-old building long-term wealth, which ETF type is generally better?",
+        options: [
+          { text: "Distributing — to get regular cash payouts", correct: false },
+          { text: "Accumulating — to benefit from automatic compounding", correct: true },
+          { text: "Both are always identical in outcome", correct: false },
+          { text: "Neither — only buy individual stocks", correct: false }
+        ],
+        correctFeedback: "Spot on! Accumulating ETFs let compound interest do its magic without tax drag on each dividend payment.",
+        wrongFeedback: "Think about compound interest. When dividends are reinvested automatically, your money grows exponentially without manual action or immediate tax."
+      }
+    }
+  },
+  {
+    id: 3,
+    title: "Open Your First Broker Account",
+    icon: "🏦",
+    desc: "A step-by-step mission to get you set up with a real investing account in under 10 minutes.",
+    tags: ["Action Quest", "10 min"],
+    xp: 100,
+    gold: 25,
+    lesson: {
+      heading: "Your first real-world mission",
+      intro: "This quest turns knowledge into action. Opening a broker account is the most important financial move most people never take. Today, you take it.",
+      blocks: [
+        {
+          label: "Step 1",
+          heading: "Choose your broker",
+          body: "For European beginners, two brokers stand out for zero fees and simplicity. Trade Republic and Scalable Capital both let you start a savings plan from €1/month with no order fees.",
+          highlight: "Recommended for beginners: Trade Republic (mobile-first, ultra-simple) or Scalable Capital (more features, great for ETF plans).",
+          example: "<strong>What you need:</strong> A smartphone, your ID/passport, 10 minutes. That's it."
+        },
+        {
+          label: "Step 2",
+          heading: "Set up a savings plan (Sparplan)",
+          body: "Don't buy a lump sum. Set up an automatic monthly savings plan. Choose your ETF (we recommend starting with a MSCI World ETF), choose an amount (even €50 works), choose a date. Done. The money moves automatically every month.",
+          highlight: "The single most powerful investing habit: automate it. Set it once, and let compound interest run for decades.",
+          example: "<strong>€50/month at 7%/year for 35 years = €97,000</strong> — from only €21,000 invested."
+        }
+      ],
+      quiz: {
+        question: "What is the key advantage of setting up an automated monthly savings plan?",
+        options: [
+          { text: "You can time the market perfectly every month", correct: false },
+          { text: "It removes emotion and ensures consistency through dollar-cost averaging", correct: true },
+          { text: "Brokers charge lower fees for automated plans", correct: false },
+          { text: "Automated plans always buy at the lowest price", correct: false }
+        ],
+        correctFeedback: "Exactly! Automation removes emotion (the #1 enemy of investors) and dollar-cost averages your purchases over time.",
+        wrongFeedback: "The real power is psychological: automation removes the temptation to time the market, and ensures you invest consistently through ups and downs."
+      }
+    }
+  },
+  {
+    id: 4,
+    title: "The 3-Fund Portfolio",
+    icon: "⚖️",
+    desc: "Discover the simplest, most diversified investment strategy used by millions of smart investors.",
+    tags: ["Portfolio", "8 min"],
+    xp: 80,
+    gold: 20,
+    lesson: {
+      heading: "The legendary 3-fund portfolio",
+      intro: "Most investors overcomplicate things. The 3-fund portfolio is used by some of the world's smartest investors — and it's beautifully simple.",
+      blocks: [
+        {
+          label: "The strategy",
+          heading: "Three funds. Global coverage. Done.",
+          body: "The 3-fund portfolio uses just three ETFs to cover virtually the entire investable world: a developed markets fund (e.g. MSCI World), an emerging markets fund (e.g. MSCI Emerging Markets), and optionally a bond fund for stability.",
+          highlight: "A classic allocation for a growth investor: 80% MSCI World + 20% Emerging Markets. That's it. No stock picking needed.",
+          example: "<strong>Coverage:</strong> MSCI World = 1,600 companies in 23 countries. + Emerging Markets = 1,400 more in 24 developing economies."
+        },
+        {
+          label: "Rebalancing",
+          heading: "Once a year: rebalance",
+          body: "Over time, one fund grows faster than another and your allocation drifts. Once a year, sell a little of the overperformer and buy the underperformer to restore your target split. This is called rebalancing — and it forces you to buy low and sell high automatically.",
+          highlight: "Rebalancing annually takes 15 minutes and is one of the most effective portfolio management techniques. Most investors never do it.",
+          example: "<strong>Example:</strong> Target: 80/20. After a year: 85/15. Sell 5% of MSCI World, buy 5% Emerging Markets. Done."
+        }
+      ],
+      quiz: {
+        question: "What is the purpose of annual rebalancing in a 3-fund portfolio?",
+        options: [
+          { text: "To switch to better-performing funds every year", correct: false },
+          { text: "To restore your target allocation and systematically buy low, sell high", correct: true },
+          { text: "To reduce your tax bill by selling everything", correct: false },
+          { text: "Rebalancing is only for professional investors", correct: false }
+        ],
+        correctFeedback: "Perfect! Rebalancing restores your target allocation and mechanically enforces buying underperformers (cheap) and selling outperformers (expensive).",
+        wrongFeedback: "Rebalancing isn't about chasing performance. It's about maintaining your risk profile and systematically buying what's cheap and selling what's expensive."
+      }
+    }
+  },
+  {
+    id: 5,
+    title: "5 Mistakes to Avoid",
+    icon: "⚠️",
+    desc: "The most common beginner errors — and exactly how to sidestep each one.",
+    tags: ["Wisdom", "6 min"],
+    xp: 70,
+    gold: 30,
+    lesson: {
+      heading: "The 5 traps that cost beginners fortunes",
+      intro: "Knowledge isn't just about what TO do. Knowing what NOT to do is worth even more. These 5 mistakes cost investors billions every year.",
+      blocks: [
+        {
+          label: "The big ones",
+          heading: "Mistakes 1–3: The deadly trio",
+          body: "Mistake 1: Waiting for the 'right moment' to invest. There is no right moment — the best time is always now, because time in the market beats timing the market.\n\nMistake 2: Panic-selling during a crash. Markets always recover. Selling during a dip locks in your losses permanently.\n\nMistake 3: Paying high fees. A 1% annual fee seems small, but over 30 years it can cost you 25% of your final portfolio.",
+          highlight: "A 1% fee difference on €100,000 over 30 years costs you ~€100,000 in lost compound growth. Always check the TER (Total Expense Ratio).",
+          example: "<strong>Target TER:</strong> Under 0.25%/year for a broad ETF. Many cost as little as 0.07%."
+        },
+        {
+          label: "More traps",
+          heading: "Mistakes 4–5: The subtle killers",
+          body: "Mistake 4: Investing money you might need soon. Your emergency fund (3–6 months of expenses) must be in cash before you invest a single euro.\n\nMistake 5: Checking your portfolio every day. Daily checking leads to emotional decisions. Set your plan, automate it, and check quarterly at most.",
+          highlight: "The best investor behaviour: set it up correctly once, automate it, and almost completely ignore it for decades.",
+          example: "<strong>Warren Buffett:</strong> 'The stock market is designed to transfer money from the Active to the Patient.'"
+        }
+      ],
+      quiz: {
+        question: "An investor sees their portfolio drop 30% during a market crash. What should they do?",
+        options: [
+          { text: "Sell everything to prevent further losses", correct: false },
+          { text: "Do nothing — or buy more if they can afford to", correct: true },
+          { text: "Switch all funds to cash immediately", correct: false },
+          { text: "Check the portfolio every hour and decide then", correct: false }
+        ],
+        correctFeedback: "Exactly right! Every major market crash in history has recovered and gone on to new highs. Patience is the investor's greatest weapon.",
+        wrongFeedback: "Selling during a crash is the most expensive mistake an investor can make. It turns a temporary paper loss into a permanent real loss. Markets always recover."
+      }
+    }
+  }
+];
+
+let player = { name: '', classIcon: '⚔️', className: '', level: 1, xp: 0, gold: 0, completedQuests: [] };
+let selectedClass = null;
+let currentQuest = null;
+let quizAnswered = false;
+let quizCorrect = false;
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.remove('active');
+  void el.offsetWidth;
+  el.classList.add('active');
+  window.scrollTo(0,0);
+  // Auto-select Guardian when entering character screen
+  if (id === 'screen-char' && !selectedClass) {
+    const first = document.querySelector('.class-card');
+    if (first) { first.click(); }
+  }
+}
+
+function selectClass(el, icon, name) {
+  document.querySelectorAll('.class-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedClass = { icon, name };
+  checkCharReady();
+}
+
+function checkCharReady() {
+  // Button is always active - validation happens in startGame()
+}
+
+function startGame() {
+  const name = document.getElementById('char-name').value.trim();
+  if (!name) { 
+    document.getElementById('char-name').focus();
+    document.getElementById('char-name').style.borderColor = '#E8A820';
+    return; 
+  }
+  if (!selectedClass) {
+    document.querySelectorAll('.class-card')[0].click();
+  }
+  player.name = name;
+  player.classIcon = selectedClass.icon;
+  player.className = selectedClass.name;
+  updateHUD();
+  renderQuestList();
+  showScreen('screen-game');
+}
+
+function updateHUD() {
+  const levelNames = ['Novice','Apprentice','Investor','Strategist','Wealth Master'];
+  const lvlName = levelNames[Math.min(player.level - 1, levelNames.length - 1)];
+  document.getElementById('hdr-avatar').textContent = player.classIcon;
+  document.getElementById('hdr-name').textContent = player.name;
+  document.getElementById('hdr-level').textContent = `Level ${player.level} · ${lvlName}`;
+  document.getElementById('hdr-gold').textContent = player.gold;
+  const xpNeeded = player.level * 100;
+  const pct = Math.round((player.xp / xpNeeded) * 100);
+  document.getElementById('xp-fill').style.width = Math.min(pct, 100) + '%';
+  document.getElementById('xp-label').textContent = `${player.xp} / ${xpNeeded} XP`;
+  const done = player.completedQuests.length;
+  document.getElementById('chapter-pct').textContent = `${done} / 5 quests`;
+  document.getElementById('chapter-fill').style.width = (done / 5 * 100) + '%';
+}
+
+function renderQuestList() {
+  const wrap = document.getElementById('quest-list');
+  wrap.innerHTML = QUESTS.map((q, i) => {
+    const done = player.completedQuests.includes(q.id);
+    const locked = i > 0 && !player.completedQuests.includes(QUESTS[i-1].id);
+    const isActive = !done && !locked;
+    const cls = done ? 'completed' : locked ? 'locked' : 'active';
+    return `
+      <div class="quest-card ${cls}" onclick="${locked ? 'return false;' : `openQuest(${q.id})`}" style="${locked ? 'cursor:default;' : 'cursor:pointer;'}">
+        <div class="quest-icon-wrap">
+          <div class="quest-icon">${done ? '✅' : q.icon}</div>
+          ${locked ? '<div class="quest-lock-icon">🔒</div>' : ''}
+        </div>
+        <div class="quest-body">
+          <div class="quest-title">${q.title}</div>
+          <div class="quest-desc">${q.desc}</div>
+          <div class="quest-tags">${q.tags.map(t => `<span class="qtag">${t}</span>`).join('')}</div>
+        </div>
+        <div class="quest-reward">
+          ${done
+            ? `<div class="quest-check">✓</div>`
+            : `<div class="quest-xp">${q.xp}</div><div class="quest-xp-lbl">XP</div>`}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function openQuest(id) {
+  currentQuest = QUESTS.find(q => q.id === id);
+  quizAnswered = false;
+  quizCorrect = false;
+  document.getElementById('quest-hdr-title').textContent = currentQuest.title;
+
+  const L = currentQuest.lesson;
+  const blocksHtml = L.blocks.map(b => `
+    <div class="lesson-block">
+      <div class="lb-label">${b.label}</div>
+      <div class="lb-heading">${b.heading}</div>
+      <div class="lb-body">${b.body.replace(/\n/g,'<br><br>')}</div>
+      <div class="lb-highlight">${b.highlight}</div>
+      <div class="lb-example">${b.example}</div>
+    </div>
+  `).join('');
+
+  const qz = L.quiz;
+  const optionsHtml = qz.options.map((o, i) => `
+    <div class="qq-opt" onclick="answerQuiz(this, ${o.correct}, '${o.correct ? qz.correctFeedback.replace(/'/g,"&#39;") : qz.wrongFeedback.replace(/'/g,"&#39;")}')" data-correct="${o.correct}">
+      <div class="qq-opt-dot">${String.fromCharCode(65+i)}</div>
+      ${o.text}
+    </div>
+  `).join('');
+
+  const alreadyDone = player.completedQuests.includes(currentQuest.id);
+
+  document.getElementById('quest-content').innerHTML = `
+    <div class="quest-mission-card">
+      <div class="qm-eyebrow">${currentQuest.icon} Quest ${currentQuest.id} of 5</div>
+      <div class="qm-title">${currentQuest.title}</div>
+      <div class="qm-intro">${L.intro}</div>
+    </div>
+    ${blocksHtml}
+    <div class="lesson-block quest-quiz">
+      <div class="lb-label">Knowledge Check</div>
+      <div class="qq-question">${qz.question}</div>
+      <div class="qq-options" id="quiz-opts">${optionsHtml}</div>
+      <div class="qq-feedback" id="quiz-feedback"></div>
+    </div>
+    <div class="complete-section">
+      <div class="xp-reward-preview">🪙 +${currentQuest.xp} XP · +${currentQuest.gold} Gold</div>
+      <button class="btn-complete ${alreadyDone ? 'ready' : ''}" id="btn-complete" onclick="completeQuest()">
+        ${alreadyDone ? 'Completed ✓ — Review again' : 'Complete Quest →'}
+      </button>
+    </div>
+  `;
+  showScreen('screen-quest');
+}
+
+function answerQuiz(el, isCorrect, feedback) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  quizCorrect = isCorrect;
+  document.querySelectorAll('.qq-opt').forEach(o => {
+    o.style.pointerEvents = 'none';
+    if (o.dataset.correct === 'true') o.classList.add('correct');
+  });
+  el.classList.remove('correct');
+  el.classList.add(isCorrect ? 'correct' : 'wrong');
+  const fb = document.getElementById('quiz-feedback');
+  fb.className = `qq-feedback ${isCorrect ? 'correct' : 'wrong'}`;
+  fb.textContent = (isCorrect ? '✓ ' : '✗ ') + feedback;
+  fb.style.display = 'block';
+  if (isCorrect) document.getElementById('btn-complete').classList.add('ready');
+  else {
+    setTimeout(() => document.getElementById('btn-complete').classList.add('ready'), 1500);
+  }
+}
+
+function completeQuest() {
+  if (!currentQuest) return;
+  const alreadyDone = player.completedQuests.includes(currentQuest.id);
+  if (!alreadyDone) {
+    player.xp += currentQuest.xp;
+    player.gold += currentQuest.gold;
+    player.completedQuests.push(currentQuest.id);
+    const xpNeeded = player.level * 100;
+    if (player.xp >= xpNeeded) { player.level++; player.xp = player.xp - xpNeeded; }
+  }
+  updateHUD();
+  showLevelUp(alreadyDone);
+}
+
+function showLevelUp(alreadyDone) {
+  const q = currentQuest;
+  document.getElementById('lu-particles').textContent = alreadyDone ? '📖' : '🎉';
+  document.getElementById('lu-title').textContent = alreadyDone ? 'Quest Reviewed!' : 'Quest Complete!';
+  document.getElementById('lu-sub').textContent = alreadyDone
+    ? `You revisited "${q.title}". Knowledge reinforced.`
+    : `You mastered "${q.title}". XP and Gold awarded!`;
+
+  document.getElementById('lu-rewards').innerHTML = alreadyDone ? '' : `
+    <div class="lu-reward"><div class="lu-reward-val">+${q.xp}</div><div class="lu-reward-lbl">XP Earned</div></div>
+    <div class="lu-reward"><div class="lu-reward-val">+${q.gold}</div><div class="lu-reward-lbl">Gold</div></div>
+    <div class="lu-reward"><div class="lu-reward-val">Lv.${player.level}</div><div class="lu-reward-lbl">Current Level</div></div>
+  `;
+
+  const nl = document.getElementById('lu-newsletter');
+  nl.style.display = (player.completedQuests.length === 1 && !alreadyDone) ? 'block' : 'none';
+  showScreen('screen-levelup');
+  if (!alreadyDone) showXPToast(`+${q.xp} XP · +${q.gold} 🪙`);
+}
+
+function handleNewsletterSignup() {
+  const email = document.getElementById('lu-email').value;
+  if (!email.includes('@')) return;
+  document.getElementById('lu-newsletter').innerHTML = `
+    <div style="text-align:center; padding:0.5rem;">
+      <div style="font-size:2rem; margin-bottom:0.5rem;">🗞</div>
+      <div style="font-family:var(--serif); color:var(--gold2); font-size:15px; margin-bottom:4px;">You're in the Guild!</div>
+      <div style="font-size:13px; color:var(--text2);">Weekly dispatch arrives every Monday. Keep questing.</div>
+    </div>
+  `;
+}
+
+function returnToMap() {
+  renderQuestList();
+  updateHUD();
+  showScreen('screen-game');
+}
+
+function showXPToast(msg) {
+  const existing = document.querySelector('.xp-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'xp-toast';
+  toast.innerHTML = `<span>⚔</span><span>${msg}</span>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2800);
+}
+</script>
+<script>
+function cwgToggle(){const m=document.getElementById('cwgm');const b=document.getElementById('cwgb');m.classList.toggle('open');b.textContent=m.classList.contains('open')?'✕':'☰';}
+document.addEventListener('click',e=>{if(!e.target.closest('.cw-game-nav')&&!e.target.closest('.cw-game-mob'))document.getElementById('cwgm').classList.remove('open');});
+</script></body>
+</html>

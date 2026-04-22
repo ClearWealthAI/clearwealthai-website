@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Map – Wealth Quest</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#EFF7E8;
+  --bg2:#FFFFFF;
+  --border:#C8DFB8;
+  --text:#1C2A16;
+  --text2:#4A6038;
+  --text3:#90A880;
+  --gold:#E8A820;--gold2:#F5BC38;--gold-dark:#B8820A;
+  --gold-bg:#FFF8E6;--gold-border:#F0D068;
+  --green:#3A9E5C;--green2:#48BC6E;
+  --green-bg:#EDFAF2;--green-border:#88D4A4;
+  --blue:#3B7AD8;--blue-lt:#EEF4FF;
+  --gray:#C8D8C0;
+  --shadow:0 2px 14px rgba(28,42,22,0.1);
+  --shadow-lg:0 6px 32px rgba(28,42,22,0.14);
+  --serif:'Nunito',sans-serif;
+  --sans:'Plus Jakarta Sans',sans-serif;
+}
+html,body{height:100%;overflow:hidden;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+/* HEADER */
+.hdr{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:56px;
+  background:rgba(239,247,232,0.97);backdrop-filter:blur(14px);
+  border-bottom:2px solid var(--border);
+  display:flex;align-items:center;gap:10px;padding:0 12px;
+  box-shadow:0 2px 8px rgba(28,42,22,0.07);
+}
+.hdr-logo{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.hdr-icon{width:33px;height:33px;border-radius:9px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 8px rgba(232,168,32,0.3);}
+.hdr-name{font-family:var(--serif);font-size:15px;font-weight:900;}
+.hdr-mid{flex:1;display:flex;align-items:center;justify-content:center;}
+.ch-pill{
+  background:var(--bg2);border:2px solid var(--border);border-radius:100px;
+  padding:5px 12px;display:flex;align-items:center;gap:8px;
+  box-shadow:var(--shadow);
+}
+.ch-name{font-size:12px;font-weight:700;}
+.ch-track{width:70px;height:7px;background:var(--bg);border-radius:4px;overflow:hidden;border:1px solid var(--border);}
+.ch-fill{height:100%;width:20%;background:linear-gradient(90deg,var(--green),var(--green2));border-radius:4px;}
+.ch-pct{font-size:11px;font-weight:800;color:var(--green);min-width:26px;}
+.hdr-right{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.xp-pill{background:var(--gold-bg);border:1.5px solid var(--gold-border);border-radius:100px;padding:5px 11px;font-size:12px;font-weight:700;color:var(--gold-dark);}
+.back-btn{background:var(--bg2);border:2px solid var(--border);border-radius:100px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text2);font-family:var(--sans);box-shadow:var(--shadow);transition:border-color 0.15s;}
+.back-btn:hover{border-color:var(--green);}
+
+/* CANVAS */
+.canvas{position:fixed;top:56px;left:0;right:0;bottom:0;overflow:hidden;cursor:grab;touch-action:none;}
+.canvas:active{cursor:grabbing;}
+.world{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:1200px;height:820px;}
+
+/* TERRAIN */
+.terrain{position:absolute;inset:0;pointer-events:none;}
+
+/* PATH CONNECTOR */
+.path-svg{position:absolute;inset:0;pointer-events:none;overflow:visible;}
+
+/* QUEST NODE */
+.node{
+  position:absolute;transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  cursor:pointer;z-index:20;
+  transition:transform 0.15s;
+}
+.node:hover:not(.locked){transform:translate(-50%,-50%) scale(1.08);}
+.node.locked{cursor:not-allowed;}
+.node-ring{position:relative;width:80px;height:80px;flex-shrink:0;}
+.node-ring svg{position:absolute;inset:0;width:100%;height:100%;}
+.node-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:2;}
+.node-label{
+  font-family:var(--serif);font-size:12px;font-weight:800;
+  text-align:center;max-width:100px;line-height:1.3;
+  background:rgba(239,247,232,0.92);border:1.5px solid var(--border);
+  padding:4px 10px;border-radius:100px;
+  box-shadow:0 1px 4px rgba(28,42,22,0.08);
+  white-space:nowrap;
+}
+.node.done .node-label{color:var(--green);border-color:var(--green-border);background:var(--green-bg);}
+.node.active .node-label{color:var(--gold-dark);border-color:var(--gold-border);background:var(--gold-bg);}
+.node.locked .node-label{color:var(--text3);background:rgba(255,255,255,0.7);}
+.node-xp{
+  font-size:11px;font-weight:700;padding:3px 11px;border-radius:100px;
+  box-shadow:0 1px 4px rgba(28,42,22,0.1);
+}
+.node.done .node-xp{color:var(--green);background:var(--green-bg);border:1.5px solid var(--green-border);}
+.node.active .node-xp{color:var(--gold-dark);background:var(--gold-bg);border:1.5px solid var(--gold-border);}
+.node.locked .node-xp{color:var(--text3);background:rgba(255,255,255,0.7);border:1.5px solid var(--border);}
+
+@keyframes float{0%,100%{transform:translate(-50%,-60%) translateY(0);}50%{transform:translate(-50%,-60%) translateY(-7px);}}
+@keyframes ripple{0%{transform:scale(1);opacity:0.5;}100%{transform:scale(1.5);opacity:0;}}
+.node.active{animation:float 3s ease-in-out infinite;}
+
+/* CHAPTER LABELS */
+.ch-lbl{position:absolute;font-family:var(--serif);font-size:12px;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;background:var(--bg2);border:2px solid;border-radius:100px;padding:5px 14px;box-shadow:var(--shadow);pointer-events:none;}
+
+/* DECORATIVE */
+.deco{position:absolute;pointer-events:none;user-select:none;}
+
+/* TOOLTIP */
+.tip{
+  position:fixed;z-index:500;background:var(--bg2);border:2px solid var(--border);
+  border-radius:16px;padding:1rem 1.2rem;width:230px;
+  box-shadow:var(--shadow-lg);pointer-events:none;transition:opacity 0.15s;
+}
+.tip.hidden{opacity:0;pointer-events:none;}
+.tip-tag{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--green);margin-bottom:4px;}
+.tip-title{font-family:var(--serif);font-size:14px;font-weight:900;margin-bottom:5px;}
+.tip-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:9px;}
+.tip-row{display:flex;justify-content:space-between;font-size:12px;}
+.tip-xp{font-weight:700;color:var(--gold-dark);}
+.tip-st{font-weight:700;padding:2px 9px;border-radius:100px;font-size:11px;}
+.tip-st.done{background:var(--green-bg);color:var(--green);}
+.tip-st.active{background:var(--gold-bg);color:var(--gold-dark);}
+.tip-st.locked{background:#F0F0EE;color:var(--text3);}
+
+/* LEGEND */
+.legend{position:fixed;left:12px;bottom:12px;z-index:150;background:var(--bg2);border:2px solid var(--border);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);}
+.lg-ttl{font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+.lg-row{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:4px;}
+.lg-row:last-child{margin-bottom:0;}
+.lgd{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+
+/* ZOOM */
+.zoom{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:150;display:flex;flex-direction:column;gap:6px;}
+.zbtn{width:38px;height:38px;background:var(--bg2);border:2px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;cursor:pointer;color:var(--text2);box-shadow:var(--shadow);transition:border-color 0.15s;}
+.zbtn:hover{border-color:var(--green);color:var(--green);}
+
+.cw-nav{position:fixed;top:0;left:0;right:0;z-index:300;height:56px;background:rgba(239,247,232,0.97);backdrop-filter:blur(14px);border-bottom:2px solid #C8DFB8;display:flex;align-items:center;justify-content:space-between;padding:0 1rem;box-shadow:0 2px 8px rgba(28,42,22,0.07);}
+.cw-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.cw-logo-icon{width:33px;height:33px;border-radius:9px;background:#E8A820;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.cw-logo-name{font-family:var(--serif);font-size:15px;font-weight:900;color:#1C2A16;}
+.cw-nl{font-size:12px;font-weight:600;color:#4A6038;text-decoration:none;padding:5px 9px;border-radius:100px;transition:background 0.15s;white-space:nowrap;}
+.cw-nl:hover{background:rgba(58,158,92,0.1);}
+.cw-nl.active{background:#EDFAF2;color:#1E7044;}
+.cw-nav-cta{background:#E8A820;color:#fff;border:none;cursor:pointer;padding:7px 14px;border-radius:100px;font-family:var(--sans);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;}
+.cw-burger{display:none;background:none;border:1.5px solid #C8DFB8;border-radius:8px;padding:5px 9px;cursor:pointer;font-size:17px;line-height:1;}
+.cw-mob{display:none;position:fixed;top:56px;left:0;right:0;background:white;border-bottom:1.5px solid #C8DFB8;padding:0.9rem;z-index:299;flex-direction:column;gap:7px;}
+.cw-mob.open{display:flex;}
+.cw-mob-link{font-size:14px;font-weight:600;color:#4A6038;text-decoration:none;padding:10px 13px;border-radius:11px;border:1.5px solid #C8DFB8;display:flex;align-items:center;gap:9px;transition:background 0.15s;}
+.cw-mob-link:hover,.cw-mob-link.hl{background:#FFF8E6;border-color:#F5D478;color:#B8820A;}
+@media(max-width:700px){.cw-nl{display:none!important;}.cw-burger{display:block;}}
+</style>
+</head>
+<body>
+
+<nav class="cw-nav">
+  <a href="index.html" class="cw-logo">
+    <div class="cw-logo-icon">⚔️</div>
+    <div class="cw-logo-name">Wealth Quest</div>
+  </a>
+  <div style="display:flex;align-items:center;gap:2px;">
+    <a href="index.html" class="cw-nl">🏠 Home</a>
+    <a href="clearwealthai-quiz.html" class="cw-nl">🎯 ETF Quiz</a>
+    <a href="wealth-quest.html" class="cw-nl">⚔️ Play</a>
+    <a href="world-map.html" class="cw-nl active">🗺️ Map</a>
+    <a href="clearwealthai.html" class="cw-nl">📊 Calculator</a>
+  </div>
+  <a href="index.html#signup" class="cw-nav-cta">Join Waitlist</a>
+  <button class="cw-burger" onclick="cwToggle()" id="cwb">☰</button>
+</nav>
+<div class="cw-mob" id="cwm">
+  <a href="index.html" class="cw-mob-link"><span>🏠</span>Home</a>
+  <a href="clearwealthai-quiz.html" class="cw-mob-link"><span>🎯</span>ETF Quiz</a>
+  <a href="wealth-quest.html" class="cw-mob-link"><span>⚔️</span>Play</a>
+  <a href="world-map.html" class="cw-mob-link"><span>🗺️</span>World Map</a>
+  <a href="clearwealthai.html" class="cw-mob-link"><span>📊</span>Calculator</a>
+  <a href="index.html#signup" class="cw-mob-link hl"><span>📋</span>Join Waitlist</a>
+</div>
+
+<div class="zoom">
+  <div class="zbtn" onclick="dz(0.2)">+</div>
+  <div class="zbtn" onclick="dz(-0.2)">−</div>
+  <div class="zbtn" style="font-size:14px;" onclick="rz()">⌂</div>
+</div>
+
+<div class="legend">
+  <div class="lg-ttl">Legend</div>
+  <div class="lg-row"><div class="lgd" style="background:var(--green);box-shadow:0 0 5px rgba(58,158,92,0.5);"></div>Completed</div>
+  <div class="lg-row"><div class="lgd" style="background:var(--gold);box-shadow:0 0 5px rgba(232,168,32,0.5);"></div>Available</div>
+  <div class="lg-row"><div class="lgd" style="background:#C8D8C0;"></div>Locked</div>
+  <div class="lg-row"><div class="lgd" style="background:#B4C8E4;opacity:0.55;"></div>Future</div>
+</div>
+
+<div class="canvas" id="cv">
+<div class="world" id="wd">
+
+<!-- TERRAIN SVG -->
+<svg class="terrain" viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg">
+  <!-- Ground texture -->
+  <ellipse cx="320" cy="300" rx="320" ry="190" fill="#D8EEC8" opacity="0.55"/>
+  <ellipse cx="700" cy="560" rx="300" ry="160" fill="#C8DFF4" opacity="0.25"/>
+  <ellipse cx="1050" cy="260" rx="220" ry="160" fill="#E0D4F4" opacity="0.2"/>
+
+  <!-- Roads between ch1 nodes -->
+  <path d="M220,300 Q290,270 360,285" stroke="#B8D4A0" stroke-width="14" stroke-linecap="round" fill="none" opacity="0.55"/>
+  <path d="M220,300 Q290,270 360,285" stroke="#D4ECBC" stroke-width="7" stroke-linecap="round" fill="none" opacity="0.8"/>
+
+  <path d="M436,285 Q510,248 578,264" stroke="#B8D4A0" stroke-width="12" stroke-linecap="round" fill="none" opacity="0.45"/>
+  <path d="M436,285 Q510,248 578,264" stroke="#D4ECBC" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.7"/>
+
+  <path d="M652,264 Q690,310 703,368" stroke="#B8D4A0" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.38"/>
+  <path d="M652,264 Q690,310 703,368" stroke="#D4ECBC" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.55"/>
+
+  <path d="M695,444 Q658,494 618,524" stroke="#B8D4A0" stroke-width="10" stroke-linecap="round" fill="none" opacity="0.3"/>
+
+  <!-- River -->
+  <path d="M320,440 Q400,460 455,500 Q510,540 560,520 Q620,498 670,510" stroke="#90C4E8" stroke-width="9" fill="none" opacity="0.4" stroke-linecap="round"/>
+  <path d="M320,440 Q400,460 455,500 Q510,540 560,520 Q620,498 670,510" stroke="#B4D8F4" stroke-width="4" fill="none" opacity="0.6" stroke-linecap="round"/>
+
+  <!-- Mountains -->
+  <polygon points="80,240 115,172 150,240" fill="#C0D4AC" opacity="0.65"/>
+  <polygon points="108,245 150,165 192,245" fill="#CCDCB8" opacity="0.55"/>
+  <polygon points="138,250 185,155 232,250" fill="#B8CCA4" opacity="0.6"/>
+  <polygon points="115,172 122,190 108,190" fill="white" opacity="0.75"/>
+  <polygon points="150,165 158,186 142,186" fill="white" opacity="0.7"/>
+  <polygon points="185,155 194,178 176,178" fill="white" opacity="0.75"/>
+
+  <!-- Trees -->
+  <circle cx="100" cy="380" r="24" fill="#5AAE50" opacity="0.3"/>
+  <circle cx="122" cy="368" r="19" fill="#66BA5C" opacity="0.28"/>
+  <circle cx="112" cy="398" r="17" fill="#4A9E42" opacity="0.35"/>
+  <circle cx="148" cy="388" r="21" fill="#5AAE50" opacity="0.28"/>
+
+  <!-- Ch2 water -->
+  <ellipse cx="700" cy="570" rx="240" ry="120" fill="#B8D4EE" opacity="0.22"/>
+
+  <!-- Ch3 mountains (faded) -->
+  <polygon points="960,185 998,108 1036,185" fill="#D8CCE8" opacity="0.28"/>
+  <polygon points="998,190 1042,100 1086,190" fill="#DDD0EC" opacity="0.22"/>
+  <polygon points="1038,195 1088,88 1138,195" fill="#D4C8E4" opacity="0.18"/>
+
+  <!-- Chapter dashed paths ch2 -->
+  <path d="M640,560 Q720,540 800,558" stroke="#90B8E0" stroke-width="9" fill="none" stroke-dasharray="14 8" opacity="0.22" stroke-linecap="round"/>
+  <path d="M876,558 Q955,534 1020,550" stroke="#90B8E0" stroke-width="8" fill="none" stroke-dasharray="14 8" opacity="0.17" stroke-linecap="round"/>
+
+  <!-- Compass -->
+  <g transform="translate(1142,762)" opacity="0.45">
+    <circle cx="0" cy="0" r="26" stroke="#90B880" stroke-width="1.5" fill="white" fill-opacity="0.8"/>
+    <polygon points="0,-20 3,-7 0,4 -3,-7" fill="#3A9E5C"/>
+    <polygon points="0,20 3,7 0,-4 -3,7" fill="#B8D0A8"/>
+    <text x="0" y="-27" text-anchor="middle" fill="#3A9E5C" font-size="9" font-family="Nunito" font-weight="800">N</text>
+  </g>
+
+  <!-- Map border -->
+  <rect x="8" y="8" width="1184" height="804" rx="12" stroke="#A8C898" stroke-width="1.5" fill="none" opacity="0.5"/>
+</svg>
+
+<!-- CHAPTER LABELS -->
+<div class="ch-lbl" style="left:60px;top:108px;color:var(--green);border-color:var(--green-border);">Chapter I · ETF Highlands</div>
+<div class="ch-lbl" style="left:594px;top:460px;color:var(--blue);border-color:#B4C8E0;opacity:0.45;font-size:11px;">Chapter II · Locked</div>
+<div class="ch-lbl" style="left:860px;top:108px;color:#7C3AED;border-color:#D4C8E8;opacity:0.22;font-size:11px;">Chapter III · Locked</div>
+
+<!-- DECORATIVE -->
+<div class="deco" style="left:65px;top:340px;font-size:22px;opacity:0.28;">🌲</div>
+<div class="deco" style="left:88px;top:355px;font-size:18px;opacity:0.24;">🌲</div>
+<div class="deco" style="left:110px;top:370px;font-size:16px;opacity:0.2;">🌿</div>
+
+<!-- ═══ CHAPTER 1 NODES ═══ -->
+
+<!-- Q1: DONE -->
+<div class="node done" style="left:178px;top:300px;" onclick="showTip(1,event)">
+  <div class="node-ring">
+    <svg viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="36" fill="white" stroke="#3A9E5C" stroke-width="4"/>
+      <circle cx="40" cy="40" r="27" fill="#EDFAF2"/>
+    </svg>
+    <div class="node-emoji">✅</div>
+  </div>
+  <div class="node-label">What is an ETF?</div>
+  <div class="node-xp">+50 XP ✓</div>
+</div>
+
+<!-- Q2: ACTIVE -->
+<div class="node active" style="left:398px;top:285px;" onclick="showTip(2,event)">
+  <div class="node-ring">
+    <div style="position:absolute;inset:-8px;border-radius:50%;border:3px solid var(--gold);opacity:0.45;animation:ripple 1.8s ease-out infinite;"></div>
+    <div style="position:absolute;inset:-16px;border-radius:50%;border:2px solid var(--gold);opacity:0.2;animation:ripple 1.8s ease-out 0.7s infinite;"></div>
+    <svg viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="36" fill="white" stroke="#E8A820" stroke-width="4"/>
+      <circle cx="40" cy="40" r="27" fill="#FFF8E6"/>
+    </svg>
+    <div class="node-emoji">🔄</div>
+  </div>
+  <div class="node-label">Accumulating vs. Distributing</div>
+  <div class="node-xp">+60 XP ▶</div>
+</div>
+
+<!-- Q3: LOCKED -->
+<div class="node locked" style="left:614px;top:264px;" onclick="showTip(3,event)">
+  <div class="node-ring" style="opacity:0.55;">
+    <svg viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="36" fill="white" stroke="#C8D8B8" stroke-width="3" stroke-dasharray="8 5"/>
+      <circle cx="40" cy="40" r="27" fill="#F4F8F0"/>
+    </svg>
+    <div class="node-emoji" style="filter:grayscale(0.5);font-size:26px;">🏦</div>
+    <div style="position:absolute;bottom:0;right:0;width:22px;height:22px;border-radius:50%;background:white;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:var(--shadow);">🔒</div>
+  </div>
+  <div class="node-label">Open First Broker</div>
+  <div class="node-xp">+100 XP 🔒</div>
+</div>
+
+<!-- Q4: LOCKED -->
+<div class="node locked" style="left:682px;top:406px;" onclick="showTip(4,event)">
+  <div class="node-ring" style="opacity:0.5;">
+    <svg viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="36" fill="white" stroke="#C8D8B8" stroke-width="3" stroke-dasharray="8 5"/>
+      <circle cx="40" cy="40" r="27" fill="#F4F8F0"/>
+    </svg>
+    <div class="node-emoji" style="filter:grayscale(0.4);font-size:26px;">⚖️</div>
+    <div style="position:absolute;bottom:0;right:0;width:22px;height:22px;border-radius:50%;background:white;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:var(--shadow);">🔒</div>
+  </div>
+  <div class="node-label">3-Fund Portfolio</div>
+  <div class="node-xp">+80 XP 🔒</div>
+</div>
+
+<!-- Q5: LOCKED -->
+<div class="node locked" style="left:552px;top:524px;" onclick="showTip(5,event)">
+  <div class="node-ring" style="opacity:0.5;">
+    <svg viewBox="0 0 80 80">
+      <circle cx="40" cy="40" r="36" fill="white" stroke="#C8D8B8" stroke-width="3" stroke-dasharray="8 5"/>
+      <circle cx="40" cy="40" r="27" fill="#F4F8F0"/>
+    </svg>
+    <div class="node-emoji" style="filter:grayscale(0.4);font-size:26px;">⚠️</div>
+    <div style="position:absolute;bottom:0;right:0;width:22px;height:22px;border-radius:50%;background:white;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:var(--shadow);">🔒</div>
+  </div>
+  <div class="node-label">5 Mistakes</div>
+  <div class="node-xp">+70 XP 🔒</div>
+</div>
+
+<!-- CH2 PREVIEW (faded) -->
+<div style="position:absolute;left:720px;top:560px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0.25;pointer-events:none;">
+  <div style="width:60px;height:60px;border-radius:50%;background:white;border:2.5px dashed #90B8E0;display:flex;align-items:center;justify-content:center;font-size:22px;">📈</div>
+  <div style="font-family:var(--serif);font-size:10px;font-weight:800;color:var(--blue);">Stocks 101</div>
+</div>
+<div style="position:absolute;left:880px;top:548px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0.18;pointer-events:none;">
+  <div style="width:60px;height:60px;border-radius:50%;background:white;border:2.5px dashed #90B8E0;display:flex;align-items:center;justify-content:center;font-size:22px;">💰</div>
+  <div style="font-family:var(--serif);font-size:10px;font-weight:800;color:var(--blue);">Dividends</div>
+</div>
+<div style="position:absolute;left:1040px;top:530px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0.13;pointer-events:none;">
+  <div style="width:60px;height:60px;border-radius:50%;background:white;border:2.5px dashed #90B8E0;display:flex;align-items:center;justify-content:center;font-size:22px;">🏠</div>
+  <div style="font-family:var(--serif);font-size:10px;font-weight:800;color:var(--blue);">REITs</div>
+</div>
+
+<!-- CH3 PREVIEW (very faint) -->
+<div style="position:absolute;left:1000px;top:252px;transform:translate(-50%,-50%);opacity:0.1;pointer-events:none;">
+  <div style="width:52px;height:52px;border-radius:50%;background:white;border:2px dashed #C8BCDC;display:flex;align-items:center;justify-content:center;font-size:20px;">🧠</div>
+</div>
+<div style="position:absolute;left:1130px;top:330px;transform:translate(-50%,-50%);opacity:0.07;pointer-events:none;">
+  <div style="width:52px;height:52px;border-radius:50%;background:white;border:2px dashed #C8BCDC;display:flex;align-items:center;justify-content:center;font-size:20px;">⚡</div>
+</div>
+
+</div><!-- world -->
+</div><!-- canvas -->
+
+<!-- TOOLTIP -->
+<div class="tip hidden" id="tip">
+  <div class="tip-tag" id="tt1"></div>
+  <div class="tip-title" id="tt2"></div>
+  <div class="tip-desc" id="tt3"></div>
+  <div class="tip-row">
+    <span class="tip-xp" id="tt4"></span>
+    <span class="tip-st" id="tt5"></span>
+  </div>
+  <div id="tt6" style="margin-top:10px;"></div>
+</div>
+
+<script>
+const QD=[
+  {id:1,tag:'Quest 1 of 5',title:'What is an ETF?',desc:'Learn what ETFs are and why they are the most powerful tool for everyday investors.',xp:'+50 XP · +10 🪙',s:'done'},
+  {id:2,tag:'Quest 2 of 5',title:'Accumulating vs. Distributing',desc:'Understand the difference between reinvesting dividends and taking them as cash.',xp:'+60 XP · +12 🪙',s:'active'},
+  {id:3,tag:'Quest 3 of 5 · Locked',title:'Open Your First Broker',desc:'Complete Quest 2 to unlock this mission.',xp:'+100 XP · +25 🪙',s:'locked'},
+  {id:4,tag:'Quest 4 of 5 · Locked',title:'The 3-Fund Portfolio',desc:'Complete Quest 3 to unlock this mission.',xp:'+80 XP · +20 🪙',s:'locked'},
+  {id:5,tag:'Quest 5 of 5 · Locked',title:'5 Mistakes to Avoid',desc:'Complete Quest 4 to unlock this mission.',xp:'+70 XP · +30 🪙',s:'locked'},
+];
+function showTip(id,e){
+  const q=QD[id-1];
+  document.getElementById('tt1').textContent=q.tag+' · ETF Highlands';
+  document.getElementById('tt2').textContent=q.title;
+  document.getElementById('tt3').textContent=q.desc;
+  document.getElementById('tt4').textContent=q.xp;
+  const st=document.getElementById('tt5');
+  if(q.s==='done'){st.textContent='✓ Done';st.className='tip-st done';}
+  else if(q.s==='active'){st.textContent='▶ Active';st.className='tip-st active';}
+  else{st.textContent='🔒 Locked';st.className='tip-st locked';}
+  const btn=document.getElementById('tt6');
+  if(q.s==='done'||q.s==='active'){
+    btn.innerHTML=`<a href="wealth-quest.html" style="display:block;text-align:center;background:#E8A820;color:#1A1200;font-size:12px;font-weight:700;padding:8px 14px;border-radius:100px;text-decoration:none;margin-top:4px;">${q.s==='done'?'▶ Play Again':'⚔️ Start Quest'}</a>`;
+  } else {
+    btn.innerHTML='<div style="text-align:center;font-size:11px;color:#A89E90;padding:4px 0;">Complete previous quest to unlock</div>';
+  }
+  const t=document.getElementById('tip');
+  t.classList.remove('hidden');
+  let x=e.clientX+14,y=e.clientY-14;
+  if(x+245>window.innerWidth)x=e.clientX-245;
+  if(y+130>window.innerHeight)y=e.clientY-130;
+  t.style.left=x+'px';t.style.top=y+'px';
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.node'))document.getElementById('tip').classList.add('hidden');});
+
+// Pan & zoom
+let sc=1,px=0,py=0,drag=false,sx=0,sy=0;
+const cv=document.getElementById('cv'),wd=document.getElementById('wd');
+function ap(){wd.style.transform=`translate(calc(-50% + ${px}px),calc(-50% + ${py}px)) scale(${sc})`;}
+cv.addEventListener('mousedown',e=>{drag=true;sx=e.clientX-px;sy=e.clientY-py;});
+window.addEventListener('mousemove',e=>{if(!drag)return;px=e.clientX-sx;py=e.clientY-sy;ap();});
+window.addEventListener('mouseup',()=>drag=false);
+cv.addEventListener('wheel',e=>{e.preventDefault();sc=Math.max(0.3,Math.min(2.5,sc-e.deltaY*0.001));ap();},{passive:false});
+function dz(d){sc=Math.max(0.3,Math.min(2.5,sc+d));ap();}
+function rz(){sc=1;px=0;py=0;ap();}
+let ltd=0;
+cv.addEventListener('touchstart',e=>{if(e.touches.length===1){drag=true;sx=e.touches[0].clientX-px;sy=e.touches[0].clientY-py;}if(e.touches.length===2)ltd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);},{passive:true});
+cv.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===1&&drag){px=e.touches[0].clientX-sx;py=e.touches[0].clientY-sy;ap();}if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);sc=Math.max(0.3,Math.min(2.5,sc*(d/ltd)));ltd=d;ap();}},{passive:false});
+cv.addEventListener('touchend',()=>drag=false);
+</script>
+<script>
+function cwToggle(){const m=document.getElementById('cwm');const b=document.getElementById('cwb');m.classList.toggle('open');b.textContent=m.classList.contains('open')?'✕':'☰';}
+document.addEventListener('click',e=>{if(!e.target.closest('.cw-nav')&&!e.target.closest('.cw-mob'))document.getElementById('cwm').classList.remove('open');});
+</script></body>
+</html>
