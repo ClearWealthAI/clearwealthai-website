@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investing Glossary – ClearWealth AI</title>
+<meta name="description" content="Your complete guide to investing terms. 50+ concepts explained simply — no jargon, no fluff. From ETF to FIRE, we cover everything a beginner investor needs to know.">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F8F6F1;--bg2:#FFFFFF;--bg3:#F0EDE6;
+  --text:#1C1A16;--text2:#6B6355;--text3:#A89E90;
+  --gold:#E8A820;--gold2:#F5BC38;--gold-dark:#B8820A;
+  --gold-bg:#FFF8E6;--gold-border:#F5D478;
+  --green:#3A9E5C;--green-bg:#EDFAF2;--green-border:#90D4AC;
+  --border:#E4E0D8;--border2:#CCC8BE;
+  --shadow:0 2px 12px rgba(28,26,22,0.07);
+  --shadow-lg:0 8px 40px rgba(28,26,22,0.12);
+  --r:14px;--rl:22px;
+  --serif:'Nunito',sans-serif;--sans:'Plus Jakarta Sans',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;height:58px;background:rgba(248,246,241,0.96);backdrop-filter:blur(16px);border-bottom:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.25rem;}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 3px 10px rgba(232,168,32,0.35);}
+.logo-name{font-family:var(--serif);font-size:17px;font-weight:900;color:var(--text);}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-link{font-size:13px;font-weight:600;color:var(--text2);text-decoration:none;padding:6px 10px;border-radius:100px;transition:background 0.15s,color 0.15s;white-space:nowrap;}
+.nav-link:hover{background:var(--bg3);color:var(--text);}
+.nav-link.active{background:var(--gold-bg);color:var(--gold-dark);}
+.nav-btn{background:var(--gold);color:#fff;border:none;cursor:pointer;padding:9px 18px;border-radius:100px;font-family:var(--sans);font-size:13px;font-weight:700;box-shadow:0 3px 10px rgba(232,168,32,0.3);transition:transform 0.15s;text-decoration:none;white-space:nowrap;}
+.nav-btn:hover{transform:translateY(-1px);}
+.burger{display:none;background:none;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:18px;line-height:1;color:var(--text);}
+.mob-menu{display:none;position:fixed;top:58px;left:0;right:0;background:var(--bg2);border-bottom:1.5px solid var(--border);padding:1rem 1.25rem;z-index:99;box-shadow:var(--shadow-lg);flex-direction:column;gap:8px;}
+.mob-menu.open{display:flex;}
+.mob-link{font-size:14px;font-weight:600;color:var(--text2);text-decoration:none;padding:11px 14px;border-radius:12px;border:1.5px solid var(--border);display:flex;align-items:center;gap:10px;transition:background 0.15s,border-color 0.15s;}
+.mob-link:hover{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold-dark);}
+@media(max-width:720px){.nav-links{display:none!important;}.burger{display:block;}}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1A2E18 0%,#2C4828 55%,#3A5C34 100%);padding:4rem 1.25rem 3rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,0.015) 0,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 18px);}
+.hero>*{position:relative;}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(245,188,56,0.14);border:1.5px solid rgba(245,188,56,0.3);color:#F5BC38;font-size:12px;font-weight:700;padding:5px 15px;border-radius:100px;margin-bottom:1.25rem;letter-spacing:0.06em;text-transform:uppercase;}
+.hero h1{font-family:var(--serif);font-size:clamp(2rem,5vw,3rem);font-weight:900;color:#fff;margin-bottom:0.65rem;line-height:1.15;}
+.hero h1 span{color:#F5BC38;}
+.hero p{font-size:15px;color:rgba(255,255,255,0.6);max-width:520px;margin:0 auto 2rem;line-height:1.7;}
+
+/* SEARCH */
+.search-wrap{max-width:560px;margin:0 auto;position:relative;}
+.search-inp{width:100%;padding:16px 20px 16px 52px;border-radius:100px;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-family:var(--sans);font-size:15px;outline:none;transition:border-color 0.2s,background 0.2s;}
+.search-inp:focus{border-color:rgba(245,188,56,0.5);background:rgba(255,255,255,0.12);}
+.search-inp::placeholder{color:rgba(255,255,255,0.35);}
+.search-ico{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:20px;pointer-events:none;}
+.search-count{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:rgba(255,255,255,0.35);}
+
+/* CATEGORIES */
+.cats{max-width:960px;margin:0 auto;padding:2rem 1.25rem 0;display:flex;flex-wrap:wrap;gap:8px;}
+.cat-btn{padding:7px 16px;border-radius:100px;border:1.5px solid var(--border);background:var(--bg2);font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;transition:all 0.15s;font-family:var(--sans);}
+.cat-btn:hover,.cat-btn.active{background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold-dark);}
+
+/* ALPHABET NAV */
+.alpha-nav{max-width:960px;margin:1rem auto 0;padding:0 1.25rem;display:flex;flex-wrap:wrap;gap:4px;}
+.alpha-btn{width:32px;height:32px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg2);font-size:12px;font-weight:800;color:var(--text3);cursor:pointer;transition:all 0.15s;font-family:var(--serif);display:flex;align-items:center;justify-content:center;}
+.alpha-btn:hover,.alpha-btn.has-terms{color:var(--text);border-color:var(--border2);}
+.alpha-btn.active{background:var(--gold);border-color:var(--gold);color:#fff;}
+.alpha-btn.disabled{opacity:0.3;cursor:default;}
+
+/* MAIN CONTENT */
+.main{max-width:960px;margin:0 auto;padding:2rem 1.25rem 4rem;}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:4rem 1.25rem;display:none;}
+.no-results.show{display:block;}
+.no-results h3{font-family:var(--serif);font-size:1.3rem;font-weight:900;margin-bottom:0.5rem;}
+.no-results p{color:var(--text2);font-size:14px;}
+
+/* LETTER GROUP */
+.letter-group{margin-bottom:2.5rem;}
+.letter-heading{font-family:var(--serif);font-size:2rem;font-weight:900;color:var(--gold);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--gold-border);}
+
+/* TERM CARD */
+.term-card{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:1.4rem;margin-bottom:10px;transition:transform 0.15s,box-shadow 0.15s,border-color 0.15s;cursor:pointer;}
+.term-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--gold-border);}
+.term-card.expanded{border-color:var(--gold-border);box-shadow:var(--shadow-lg);}
+.term-header{display:flex;align-items:center;gap:12px;}
+.term-icon{width:42px;height:42px;border-radius:10px;background:var(--gold-bg);border:1.5px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.term-title-wrap{flex:1;min-width:0;}
+.term-name{font-family:var(--serif);font-size:16px;font-weight:900;color:var(--text);}
+.term-short{font-size:13px;color:var(--text2);margin-top:2px;}
+.term-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+.term-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--bg3);color:var(--text3);}
+.term-chevron{font-size:12px;color:var(--text3);transition:transform 0.2s;flex-shrink:0;}
+.term-card.expanded .term-chevron{transform:rotate(180deg);}
+.term-body{display:none;margin-top:1.2rem;padding-top:1.2rem;border-top:1.5px solid var(--border);}
+.term-card.expanded .term-body{display:block;}
+.term-def{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:1rem;}
+.term-highlight{background:var(--gold-bg);border:1.5px solid var(--gold-border);border-radius:10px;padding:0.9rem 1.1rem;font-size:13px;font-weight:600;color:var(--gold-dark);line-height:1.6;margin-bottom:1rem;}
+.term-highlight::before{content:'💡 ';font-size:14px;}
+.term-example{background:var(--bg3);border-radius:10px;padding:0.9rem 1.1rem;font-size:13px;color:var(--text2);line-height:1.6;}
+.term-example strong{color:var(--text);}
+.term-cta{display:inline-flex;align-items:center;gap:6px;margin-top:1rem;font-size:12px;font-weight:700;color:var(--gold-dark);text-decoration:none;padding:7px 14px;border-radius:100px;background:var(--gold-bg);border:1.5px solid var(--gold-border);transition:all 0.15s;}
+.term-cta:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+
+/* STATS BAR */
+.stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.5rem 1.25rem;text-align:center;margin-bottom:0;}
+.stats-inner{max-width:960px;margin:0 auto;display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-val{font-family:var(--serif);font-size:1.8rem;font-weight:900;color:var(--gold-dark);}
+.stat-lbl{font-size:12px;color:var(--text3);}
+
+/* CTA BANNER */
+.cta-banner{background:linear-gradient(135deg,#1A2E18 0%,#2C4828 50%,#1A3022 100%);padding:3rem 1.25rem;text-align:center;position:relative;overflow:hidden;}
+.cta-banner::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,0.013) 0,rgba(255,255,255,0.013) 1px,transparent 1px,transparent 18px);}
+.cta-banner>*{position:relative;}
+.cta-banner h2{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;color:#fff;margin-bottom:0.5rem;}
+.cta-banner p{color:rgba(255,255,255,0.55);font-size:14px;margin-bottom:1.5rem;}
+.cta-banner a{display:inline-block;background:var(--gold);color:#fff;font-weight:700;font-size:14px;padding:13px 28px;border-radius:100px;text-decoration:none;box-shadow:0 4px 20px rgba(232,168,32,0.4);transition:transform 0.15s;}
+.cta-banner a:hover{transform:translateY(-2px);}
+
+footer{background:var(--text);padding:1.75rem 1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;font-size:12px;color:rgba(255,255,255,0.3);}
+footer a{color:rgba(255,255,255,0.3);text-decoration:none;}
+footer a:hover{color:rgba(255,255,255,0.65);}
+.flogo{font-family:var(--serif);font-size:15px;font-weight:900;color:#F0C96A;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">⚔️</div>
+    <div class="logo-name">Wealth Quest</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">🏠 Home</a>
+    <a href="clearwealthai-quiz.html" class="nav-link">🎯 ETF Quiz</a>
+    <a href="https://app.clearwealthai.com" class="nav-link">⚔️ Play</a>
+    <a href="https://app.clearwealthai.com/map" class="nav-link">🗺️ World Map</a>
+    <a href="clearwealthai.html" class="nav-link">📊 Calculator</a>
+    <a href="glossar.html" class="nav-link active">📖 Glossary</a>
+  </div>
+  <a href="https://app.clearwealthai.com/register" class="nav-btn">Play Free →</a>
+  <button class="burger" onclick="toggleMenu()" id="burger">☰</button>
+</nav>
+
+<div class="mob-menu" id="mob-menu">
+  <a href="index.html" class="mob-link">🏠 Home</a>
+  <a href="clearwealthai-quiz.html" class="mob-link">🎯 ETF Quiz</a>
+  <a href="https://app.clearwealthai.com" class="mob-link">⚔️ Play Wealth Quest</a>
+  <a href="https://app.clearwealthai.com/map" class="mob-link">🗺️ World Map</a>
+  <a href="clearwealthai.html" class="mob-link">📊 Calculator</a>
+  <a href="glossar.html" class="mob-link" style="background:var(--gold-bg);border-color:var(--gold-border);color:var(--gold-dark);">📖 Glossary</a>
+</div>
+
+<div class="hero">
+  <div class="hero-tag">📖 Investing Glossary</div>
+  <h1>Every investing term.<br><span>Explained simply.</span></h1>
+  <p>No jargon. No fluff. 50+ concepts every investor needs to know — explained in plain English.</p>
+  <div class="search-wrap">
+    <span class="search-ico">🔍</span>
+    <input type="text" class="search-inp" id="searchInp" placeholder="Search terms... e.g. ETF, FIRE, TER" oninput="filterTerms()">
+    <span class="search-count" id="searchCount"></span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-val">56</div><div class="stat-lbl">Terms explained</div></div>
+    <div class="stat-item"><div class="stat-val">8</div><div class="stat-lbl">Categories</div></div>
+    <div class="stat-item"><div class="stat-val">5 min</div><div class="stat-lbl">Average read per term</div></div>
+  </div>
+</div>
+
+<div class="cats" id="catFilter">
+  <button class="cat-btn active" onclick="filterCat('all', this)">All terms</button>
+  <button class="cat-btn" onclick="filterCat('basics', this)">🏛 Basics</button>
+  <button class="cat-btn" onclick="filterCat('etf', this)">📦 ETFs</button>
+  <button class="cat-btn" onclick="filterCat('strategy', this)">🎯 Strategy</button>
+  <button class="cat-btn" onclick="filterCat('tax', this)">🧾 Tax</button>
+  <button class="cat-btn" onclick="filterCat('risk', this)">⚖️ Risk</button>
+  <button class="cat-btn" onclick="filterCat('fire', this)">🔥 FIRE</button>
+  <button class="cat-btn" onclick="filterCat('assets', this)">💎 Assets</button>
+  <button class="cat-btn" onclick="filterCat('psychology', this)">🧠 Psychology</button>
+</div>
+
+<div class="main" id="mainContent">
+  <div class="no-results" id="noResults">
+    <div style="font-size:3rem;margin-bottom:1rem;">🔍</div>
+    <h3>No terms found</h3>
+    <p>Try a different search term or browse all categories.</p>
+  </div>
+</div>
+
+<div class="cta-banner">
+  <h2>Turn knowledge into action ⚔️</h2>
+  <p>You know the terms. Now learn to use them — through quests, not textbooks.</p>
+  <a href="https://app.clearwealthai.com/register">Start Playing Free →</a>
+</div>
+
+<footer>
+  <div class="flogo">⚔ Wealth Quest</div>
+  <div><a href="index.html">Home</a> · <a href="glossar.html">Glossary</a> · <a href="clearwealthai-quiz.html">ETF Quiz</a> · <a href="clearwealthai.html">Calculator</a></div>
+  <span>Not financial advice. Educational purposes only.</span>
+</footer>
+
+<script>
+const TERMS = [
+  // A
+  { letter:'A', name:'Accumulating ETF', icon:'🔄', short:'Reinvests dividends automatically', cat:'etf', tags:['ETF','Dividends'], def:'An accumulating ETF (Thesaurierend in German) automatically reinvests any dividends paid by the companies it holds back into the fund. Instead of receiving cash, your shares simply grow in value. This is compound interest working silently for you every day.', highlight:'For long-term wealth building, accumulating ETFs are almost always the better choice — dividends compound automatically without you doing anything.', example:'Example: A distributing ETF pays you 200 euros in dividends. An accumulating ETF takes that same 200 euros and immediately buys more shares. Over 30 years, this difference is enormous.', quest:'Quest 3 — Accumulating vs. Distributing ETFs', questId:3 },
+  { letter:'A', name:'Asset Allocation', icon:'🎨', short:'How you split your portfolio across different assets', cat:'strategy', tags:['Portfolio','Strategy'], def:'Asset allocation is the strategic distribution of your investments across different asset classes — stocks, bonds, real estate, commodities and cash. Research consistently shows that asset allocation determines approximately 90% of your portfolio\'s long-term performance. It is the single most important investment decision you make.', highlight:'A 90/10 stocks to bonds portfolio will behave very differently from a 60/40 — far more volatile but with higher expected long-term returns. Choose based on your timeline and risk tolerance.', example:'Simple rule: subtract your age from 110 to get your equity percentage. At 30: 80% stocks. At 50: 60% stocks. At 70: 40% stocks.', quest:'Quest 108 — Asset Allocation', questId:108 },
+  { letter:'A', name:'Abgeltungsteuer', icon:'🧾', short:'German flat tax on investment profits', cat:'tax', tags:['Tax','Germany'], def:'Abgeltungsteuer is the German flat withholding tax applied to investment income, including capital gains and dividends. The rate is 25% plus solidarity surcharge (Soli), bringing the effective rate to approximately 26.375%. Church tax may also apply. This tax is automatically withheld by your broker.', highlight:'Every investor in Germany has an annual tax-free allowance called Sparerpauschbetrag — 1,000 euros per person, 2,000 euros for couples. Set up a Freistellungsauftrag with your broker to claim it automatically.', example:'If you earn 3,000 euros in investment profits in a year and have set up your 1,000 euro Freistellungsauftrag, you only pay tax on 2,000 euros.', quest:'Quest 15 — Tax Basics for ETF Investors', questId:15 },
+
+  // B
+  { letter:'B', name:'Bonds', icon:'📜', short:'Loans to governments or companies that pay interest', cat:'assets', tags:['Bonds','Fixed Income'], def:'When you buy a bond, you are lending money to a government or company for a set period. In return, they pay you regular interest (called the coupon) and return your original money (called the principal) at the end. Government bonds from stable countries like Germany are among the safest investments in the world.', highlight:'Bonds and stocks often move in opposite directions — when stocks fall, bonds frequently rise. This makes bonds powerful portfolio stabilizers, especially as you approach retirement.', example:'German Government Bond (Bund): You lend 10,000 euros to the German government for 10 years, receive approximately 250 euros per year in interest, then get your 10,000 euros back.', quest:'Quest 22 — Bonds: The Calming Force', questId:22 },
+  { letter:'B', name:'Broker', icon:'🏦', short:'A platform where you buy and sell investments', cat:'basics', tags:['Basics','Platform'], def:'A broker is a regulated platform or company that executes investment transactions on your behalf. For European retail investors, popular online brokers include Trade Republic, Scalable Capital, ING, Comdirect and DKB. Modern brokers offer mobile apps, low fees and automatic savings plans starting from 1 euro per month.', highlight:'For beginners, Trade Republic (mobile-first, ultra-simple) and Scalable Capital (more features) are the top recommendations. Both are BaFin-regulated and offer free ETF savings plans.', example:'To invest in the MSCI World ETF, you open an account with Trade Republic, search for IWDA, set up a monthly savings plan for 50 euros, and the rest is automatic.', quest:'Quest 6 — Open Your First Broker Account', questId:6 },
+
+  // C
+  { letter:'C', name:'Compound Interest', icon:'🌱', short:'Earning returns on your returns over time', cat:'basics', tags:['Basics','Fundamentals'], def:'Compound interest is the process of earning returns not just on your original investment, but also on all the returns you have already earned. Each year, your base grows larger, so the interest earned grows larger too. This creates an exponential snowball effect that accelerates dramatically over decades.', highlight:'Einstein reportedly called compound interest the eighth wonder of the world. Those who understand it earn it. Those who do not pay it.', example:'Simple interest: 1,000 euros at 7% for 30 years = 3,100 euros. Compound interest: 1,000 euros at 7% for 30 years = 7,612 euros. Same rate — more than double the result.', quest:'Quest 5 — The Power of Compound Interest', questId:5 },
+  { letter:'C', name:'Capital Gains', icon:'📈', short:'Profit from selling an investment for more than you paid', cat:'tax', tags:['Tax','Returns'], def:'Capital gains are the profits you make when you sell an investment for more than you originally paid. In Germany, capital gains are subject to Abgeltungsteuer at 25% plus Soli. Unrealised gains (where you still hold the investment) are not taxed until you sell. This is why holding investments long-term and delaying sales is tax-efficient.', highlight:'Unrealised gains grow tax-free. Only when you sell do you owe tax. This is why accumulating ETFs held for decades have a significant tax advantage over frequently traded assets.', example:'You buy an ETF for 5,000 euros. It grows to 8,000 euros over 10 years. Your capital gain is 3,000 euros. After your 1,000 euro Sparerpauschbetrag, you pay tax on 2,000 euros.', quest:'Quest 15 — Tax Basics for ETF Investors', questId:15 },
+  { letter:'C', name:'Coast FIRE', icon:'🏄', short:'Invest enough early that you never need to save again', cat:'fire', tags:['FIRE','Strategy'], def:'Coast FIRE is a variation of the FIRE movement where you invest aggressively in your early years until your portfolio is large enough to coast to your retirement target through compound growth alone — without adding another cent. Once you reach your Coast FIRE number, you only need to earn enough to cover your current expenses.', highlight:'Coast FIRE separates the accumulation phase from the work-optional phase. Once coasted, you have enormous freedom — you can take lower-paying but more meaningful work without worrying about retirement savings.', example:'Coast FIRE example: Invest 80,000 euros by age 30. At 7% growth, this becomes 1,220,000 euros by age 65 — without adding another cent. You just need to cover your living expenses from age 30 onward.', quest:'Quest 103 — FIRE: Financial Independence Retire Early', questId:103 },
+
+  // D
+  { letter:'D', name:'Diversification', icon:'🥚', short:'Spreading investments to reduce risk', cat:'risk', tags:['Risk','Strategy'], def:'Diversification means spreading your investments across many different assets — companies, sectors and countries — so that a failure in one area has minimal impact on your overall portfolio. A diversified portfolio does not rely on any single company, industry or economy to perform well.', highlight:'Diversification is called the only free lunch in investing — it reduces your risk without reducing your expected returns. A single stock can go to zero. A diversified index of 1,600 companies cannot.', example:'2001 Enron collapse: Employees with all their retirement savings in Enron stock lost everything. Employees with diversified index funds were largely unaffected.', quest:'Quest 9 — Diversification: The Only Free Lunch', questId:9 },
+  { letter:'D', name:'Dividend', icon:'💵', short:'Cash payments from companies to shareholders', cat:'assets', tags:['Income','Stocks'], def:'A dividend is a portion of a company\'s profits distributed to its shareholders as cash. Many mature, profitable companies pay dividends regularly — typically quarterly or annually. The dividend yield expresses dividends as a percentage of the share price and indicates your income return from dividends alone.', highlight:'A portfolio yielding 3% in dividends means 3,000 euros per year in passive income on a 100,000 euro portfolio — without selling a single share.', example:'You own 100 shares of a company that pays 2 euros per share annually in dividends. You receive 200 euros per year in passive income — regardless of what the stock price does that year.', quest:'Quest 102 — Dividend Investing: Income from Ownership', questId:102 },
+  { letter:'D', name:'Dollar-Cost Averaging', icon:'📅', short:'Investing fixed amounts at regular intervals', cat:'strategy', tags:['Strategy','Savings'], def:'Dollar-cost averaging (DCA) means investing a fixed amount of money at regular intervals — for example 200 euros every month — regardless of whether the market is up or down. When prices are high, you buy fewer shares. When prices are low, you automatically buy more. Over time, your average purchase price is smoothed out.', highlight:'DCA turns market volatility from an enemy into a friend. Falling markets mean you buy more shares at cheaper prices — automatically, without any decision required from you.', example:'Month 1: 200 euros at 10 euros per share = 20 shares. Month 2: 200 euros at 8 euros per share = 25 shares. Month 3: 200 euros at 12 euros per share = 16.7 shares. Average cost: 9.83 euros — lower than the average price of 10 euros.', quest:'Quest 7 — Dollar-Cost Averaging', questId:7 },
+  { letter:'D', name:'Distributing ETF', icon:'💰', short:'Pays dividends directly to your account as cash', cat:'etf', tags:['ETF','Dividends'], def:'A distributing ETF (Ausschüttend in German) pays out dividends received from its holdings directly to investors as cash. This can provide a regular income stream, making it attractive for retirees. However, each dividend payment may trigger immediate tax, which can reduce the compounding effect compared to accumulating ETFs.', highlight:'Distributing ETFs are ideal for retirees or investors who need regular income. For younger investors building wealth, accumulating ETFs are generally more tax-efficient and powerful.', example:'If you hold 10,000 euros in a distributing ETF with a 3% dividend yield, you receive approximately 300 euros per year in cash — but you pay tax on this immediately.', quest:'Quest 3 — Accumulating vs. Distributing ETFs', questId:3 },
+
+  // E
+  { letter:'E', name:'ETF (Exchange Traded Fund)', icon:'📦', short:'A basket of stocks you can buy like a single share', cat:'etf', tags:['ETF','Basics'], def:'An ETF is a collection of many stocks or bonds bundled together into a single investment that trades on a stock exchange like a regular share. When you buy one ETF, you instantly own tiny pieces of all the companies inside it. ETFs are typically passively managed — they track an index rather than trying to beat it.', highlight:'One MSCI World ETF gives you exposure to over 1,600 companies across 23 countries for as little as 1 euro per month. This is the most powerful diversification tool available to ordinary investors.', example:'Instead of researching and buying Apple, Microsoft, Amazon, Tesla and 1,596 other companies separately, one MSCI World ETF holds all of them at a fraction of the cost and effort.', quest:'Quest 1 — What is an ETF?', questId:1 },
+  { letter:'E', name:'Emergency Fund', icon:'🛡️', short:'3-6 months of expenses kept as accessible cash', cat:'strategy', tags:['Strategy','Planning'], def:'An emergency fund is 3 to 6 months of your total living expenses kept in a liquid, easily accessible savings account — not invested in stocks or ETFs. This cash buffer protects you from being forced to sell investments at a bad time if an unexpected expense arises, such as a job loss, medical bill or urgent home repair.', highlight:'Never invest money you might need within the next 3 years. Your emergency fund is the foundation of your financial security — it must exist before you invest a single euro.', example:'If your monthly expenses are 1,800 euros, your emergency fund should contain 5,400 to 10,800 euros in an instant-access savings account before you start investing.', quest:'Quest 13 — Build Your Emergency Fund First', questId:13 },
+  { letter:'E', name:'ESG Investing', icon:'🌿', short:'Investing according to environmental and ethical criteria', cat:'etf', tags:['ESG','Sustainable'], def:'ESG stands for Environmental, Social and Governance. ESG ETFs screen companies based on these three criteria and typically exclude or underweight industries like tobacco, weapons manufacturing, coal mining and oil sands extraction. ESG funds emphasize companies with strong climate policies, fair labor practices and transparent corporate governance.', highlight:'Historical data shows that ESG ETFs have largely matched the performance of standard market equivalents — you do not necessarily sacrifice returns to invest according to your values.', example:'An MSCI World ESG Enhanced ETF tracks a version of the MSCI World that overweights high-ESG-rated companies and underweights low-rated ones. TER is similar to standard MSCI World ETFs at around 0.20%.', quest:'Quest 18 — Sustainable Investing: ESG ETFs', questId:18 },
+
+  // F
+  { letter:'F', name:'Factor Investing', icon:'🔬', short:'Tilting your portfolio toward characteristics that historically outperform', cat:'strategy', tags:['Advanced','Strategy'], def:'Factor investing (also called smart beta) involves systematically tilting a portfolio toward specific characteristics of stocks that academic research has shown to be associated with higher long-term returns. The five most researched factors are Value (cheap stocks), Size (small companies), Momentum (rising stocks), Quality (profitable stable companies) and Low Volatility.', highlight:'Factor investing is not about picking individual hot stocks — it is about systematically owning thousands of stocks that share a characteristic historically associated with better returns.', example:'A Value ETF buys the cheapest stocks relative to their earnings across the MSCI World. Historically, value stocks have outperformed the broad market by 3 to 5% annually over very long periods.', quest:'Quest 104 — Factor Investing: Finding the Edge', questId:104 },
+  { letter:'F', name:'FIRE (Financial Independence, Retire Early)', icon:'🔥', short:'A movement built on aggressive saving to retire early', cat:'fire', tags:['FIRE','Strategy'], def:'FIRE stands for Financial Independence, Retire Early. It is a movement and philosophy built on the idea that through aggressive saving (typically 40-70% of income), smart investing and modest spending, ordinary people can achieve financial independence decades before traditional retirement age. The core math is the 4% rule: you need 25 times your annual expenses invested.', highlight:'FIRE is not about retiring and doing nothing — it is about gaining the freedom to choose how you spend your time, without being dependent on a salary or employer.', example:'Annual expenses of 24,000 euros multiplied by 25 equals a FIRE number of 600,000 euros. Monthly savings of 1,500 euros at 7% annual return for approximately 22 years reaches this target.', quest:'Quest 103 — FIRE: Financial Independence, Retire Early', questId:103 },
+  { letter:'F', name:'Freistellungsauftrag', icon:'🎫', short:'Tax exemption order that uses your annual free allowance', cat:'tax', tags:['Tax','Germany'], def:'A Freistellungsauftrag is an exemption order you submit to your broker in Germany that tells them not to withhold tax on your investment income up to your annual Sparerpauschbetrag limit. Without this order, your broker withholds 26.375% tax on every euro of investment profit from the first euro. With it, the first 1,000 euros per year (2,000 euros for couples) is tax-free.', highlight:'Setting up a Freistellungsauftrag takes two minutes and is completely free. Without one, you are giving the government free money every year. Every German investor should do this immediately.', example:'If you earn 800 euros in dividends and capital gains in a year and have set up your Freistellungsauftrag, you pay zero tax on all of it. Without it, you would have paid approximately 211 euros in Abgeltungsteuer.', quest:'Quest 15 — Tax Basics for ETF Investors', questId:15 },
+  { letter:'F', name:'Fund Size (AUM)', icon:'💼', short:'Total assets under management in a fund', cat:'etf', tags:['ETF','Risk'], def:'AUM stands for Assets Under Management — the total value of all investments held in a fund. A larger AUM generally indicates a more established, liquid and stable fund. Very small ETFs (under 100 million euros AUM) risk being closed by the provider if they are not commercially viable, which forces investors to sell and potentially trigger tax events.', highlight:'For safety and liquidity, look for ETFs with at least 500 million euros in AUM. The most popular ETFs like IWDA have over 70 billion euros in AUM — extremely safe.', example:'iShares Core MSCI World ETF (IWDA) has over 70 billion euros in AUM, making it one of the largest ETFs in Europe. This means excellent liquidity and essentially zero risk of fund closure.', quest:'Quest 16 — Reading an ETF Factsheet', questId:16 },
+
+  // G
+  { letter:'G', name:'Gold', icon:'🥇', short:'A precious metal used as an inflation hedge', cat:'assets', tags:['Assets','Commodities'], def:'Gold is a physical precious metal that has been used as a store of value for thousands of years. In investment portfolios, gold serves primarily as an inflation hedge, a crisis hedge and a diversifier. Unlike stocks and bonds, gold generates no income — its value comes entirely from scarcity and the belief that others will want it in the future.', highlight:'Gold is portfolio insurance, not a growth investment. Small allocations of 5 to 10% can meaningfully reduce overall portfolio volatility without significantly sacrificing long-term returns.', example:'During the 2008 financial crisis, the S&P 500 fell approximately 57% while gold rose approximately 5%. This negative correlation makes gold a valuable portfolio stabilizer during market crashes.', quest:'Quest 115 — Gold and Commodities', questId:115 },
+  { letter:'G', name:'Gesamtkostenquote (TER)', icon:'💸', short:'The German term for Total Expense Ratio', cat:'etf', tags:['ETF','Costs'], def:'Gesamtkostenquote is the German term for the Total Expense Ratio (TER) — the annual cost of owning an ETF or fund, expressed as a percentage of your investment. This fee is automatically deducted from the fund daily, so you never see it as a separate charge. It reduces your effective return by the stated percentage every year.', highlight:'Always look for ETFs with a TER below 0.25% per year. Many excellent ETFs cost as little as 0.07%. The difference between 0.07% and 1.5% can cost you over 100,000 euros on a large portfolio over 30 years.', example:'iShares Core MSCI World (IWDA): TER 0.20% per year. On 100,000 euros, that is 200 euros per year in fees. An actively managed fund at 1.5% would cost 1,500 euros per year — for statistically worse performance.', quest:'Quest 4 — Understanding TER: The Hidden Cost', questId:4 },
+
+  // I
+  { letter:'I', name:'Index', icon:'📊', short:'A list of stocks selected according to specific rules', cat:'basics', tags:['Basics','ETF'], def:'A stock market index is a list of companies selected according to specific, transparent rules — such as the largest companies in 23 developed countries (MSCI World) or the 500 largest US companies (S&P 500). Indices define exactly which companies are included, how much weight each receives and when companies are added or removed. ETFs track these indices automatically.', highlight:'An index is a rulebook. An ETF is the investment that follows that rulebook automatically. When you buy an ETF, you are buying a slice of the index it tracks — all the companies, in their exact proportions.', example:'The MSCI World Index is reviewed quarterly. Companies must be in a developed market country, meet minimum size requirements and have sufficient trading liquidity to qualify for inclusion.', quest:'Quest 8 — The MSCI World Index', questId:8 },
+  { letter:'I', name:'Inflation', icon:'🔥', short:'The rate at which prices rise and money loses value', cat:'basics', tags:['Basics','Economics'], def:'Inflation is the rate at which the general level of prices for goods and services rises over time, causing the purchasing power of money to fall. If inflation is 3% annually and your savings account pays 1%, you are effectively losing 2% of purchasing power each year — even though your account balance increases. The real return is always nominal return minus inflation.', highlight:'Money kept as cash is not safe — it is slowly losing value every year. At 3% annual inflation, 10,000 euros today will have only 7,441 euros of purchasing power in 10 years.', example:'Historical comparison: 10,000 euros in cash over 30 years at 3% inflation = approximately 4,100 euros of purchasing power. 10,000 euros invested in a diversified ETF at 8% return = approximately 100,000 euros.', quest:'Quest 12 — Inflation: The Silent Wealth Destroyer', questId:12 },
+  { letter:'I', name:'Investment Policy Statement (IPS)', icon:'📋', short:'A written rulebook for your investing decisions', cat:'psychology', tags:['Psychology','Planning'], def:'An Investment Policy Statement is a personal document that outlines your financial goals, investment strategy, risk tolerance, target asset allocation, rebalancing rules and — crucially — rules for what you will NOT do during market crises. Written during calm times, it serves as a rational anchor during emotionally turbulent market conditions.', highlight:'The most important part of any IPS is what you commit NOT to do. Writing "I will not sell if markets fall more than 30%" before a crash makes you far more likely to actually hold through it.', example:'Sample IPS statement: "I invest 400 euros per month in IWDA (70%) and EMIM (30%). I rebalance annually. I will not sell if markets fall more than 30%. I review my plan every December."', quest:'Quest 122 — The Investment Policy Statement', questId:122 },
+
+  // L
+  { letter:'L', name:'Leverage', icon:'⚡', short:'Using borrowed money to amplify investment exposure', cat:'risk', tags:['Risk','Advanced'], def:'Leverage means using borrowed money or financial derivatives to control more investment than you actually own. A 2x leveraged ETF attempts to deliver twice the daily return of its underlying index. While this amplifies gains, it equally amplifies losses — and a mathematical phenomenon called volatility decay means leveraged products systematically lose value over time in volatile markets.', highlight:'Volatility decay: a 2x ETF that falls 50% needs to rise 100% just to break even. Leveraged ETFs are designed for professional traders making daily decisions — they are wealth destroyers for long-term investors.', example:'3x Nasdaq ETF (TQQQ): From peak to trough in 2022, it lost approximately 80% of its value. A long-term buy-and-hold investor would have needed a 400% gain just to recover their losses.', quest:'Quest 116 — Leverage: The Double-Edged Sword', questId:116 },
+  { letter:'L', name:'Loss Aversion', icon:'😰', short:'The tendency to feel losses more painfully than equivalent gains', cat:'psychology', tags:['Psychology','Behavioral'], def:'Loss aversion is a cognitive bias documented by psychologists Kahneman and Tversky where the psychological pain of a loss is felt approximately twice as intensely as the pleasure of an equivalent gain. For investors, this means a 10% portfolio drop feels twice as bad as a 10% gain feels good — which frequently leads to panic selling at exactly the wrong time.', highlight:'Loss aversion is the primary reason most investors underperform the funds they invest in. The DALBAR study shows the average equity fund investor earns 3-4% less per year than the fund itself due to emotional timing decisions.', example:'A rational investor sees a 25% market drop and says: shares are on sale. A loss-averse investor feels intense psychological pain and sells, converting a temporary paper loss into a permanent real loss — and missing the recovery.', quest:'Quest 106 — Behavioral Finance: Your Brain is the Enemy', questId:106 },
+
+  // M
+  { letter:'M', name:'MSCI World', icon:'🌍', short:'An index tracking 1,600+ companies in 23 developed countries', cat:'etf', tags:['ETF','Index'], def:'The MSCI World Index tracks approximately 1,600 large and mid-cap companies across 23 developed market countries. It covers roughly 85% of the free-float adjusted market capitalization in each country. The US accounts for approximately 70% of the index, with significant allocations to Japan, UK, France, Germany and Canada.', highlight:'The MSCI World has delivered an average annual return of approximately 10% since its inception in 1969 — through recessions, crashes, wars, pandemics and crises of all kinds.', example:'Top holdings: Apple (~5%), Microsoft (~4%), NVIDIA (~3%), Amazon (~2%), Alphabet (~2%). Popular ETFs: IWDA (iShares, TER 0.20%), XDWD (Xtrackers, TER 0.19%), LCUW (Amundi, TER 0.12%).', quest:'Quest 8 — The MSCI World Index', questId:8 },
+  { letter:'M', name:'Market Crash', icon:'📉', short:'A sudden, sharp decline in market prices', cat:'risk', tags:['Risk','Psychology'], def:'A market crash is a sudden, sharp and often unexpected decline in stock prices, typically defined as a fall of 20% or more from recent highs. Famous crashes include Black Monday in 1987 (minus 22% in one day), the Dot-com bust from 2000 to 2002 (minus 49%), the 2008 Financial Crisis (minus 57%) and the COVID crash in 2020 (minus 34% in 33 days). Every single one recovered completely.', highlight:'Every major stock market crash in history has fully recovered and eventually reached new all-time highs. The only investors who permanently lost money during crashes were those who panic-sold at the bottom.', example:'2008 Financial Crisis: Markets fell 57% over 17 months. Recovery: complete by 2013. By 2020, markets had tripled from the 2009 low. Investors who held — or bought more — during the crash made enormous gains.', quest:'Quest 16 — Market Crashes: History and Recovery', questId:16 },
+
+  // N
+  { letter:'N', name:'Net Asset Value (NAV)', icon:'💱', short:'The per-share value of an ETF\'s underlying holdings', cat:'etf', tags:['ETF','Basics'], def:'The Net Asset Value of an ETF is the total value of all assets held in the fund divided by the number of outstanding shares. ETFs trade on exchanges at prices close to (but sometimes slightly different from) their NAV throughout the day. Large, liquid ETFs have very small differences between their market price and NAV.', highlight:'For mainstream index ETFs like IWDA or XDWD, the difference between market price and NAV is typically less than 0.05% — negligible for long-term investors. This is called the bid-ask spread.', example:'If an MSCI World ETF holds 70 billion euros in stocks across 1,600 companies and has 100 million shares outstanding, its NAV is 700 euros per share. The market price will be very close to 700 euros.', quest:'Quest 16 — Reading an ETF Factsheet', questId:16 },
+
+  // P
+  { letter:'P', name:'Portfolio', icon:'🗂️', short:'Your complete collection of investments', cat:'basics', tags:['Basics','Strategy'], def:'A portfolio is the complete collection of financial investments held by an individual or institution — including stocks, bonds, ETFs, cash, real estate and other assets. Your portfolio should be designed intentionally with a clear asset allocation that reflects your financial goals, investment timeline and risk tolerance.', highlight:'Think of your portfolio as a team, not a collection of individual players. Each asset plays a different role — some grow aggressively, some stabilize during downturns, some generate income.', example:'A simple, well-diversified portfolio for a 30-year-old: 70% MSCI World ETF (global stocks), 20% Emerging Markets ETF (growth), 10% Global Bond ETF (stability). Review annually. Rebalance if needed.', quest:'Quest 11 — The 3-Fund Portfolio', questId:11 },
+  { letter:'P', name:'Physical Replication', icon:'🏭', short:'An ETF that actually buys all the stocks in its index', cat:'etf', tags:['ETF','Structure'], def:'Physical replication means the ETF provider actually purchases the underlying securities (stocks or bonds) listed in the index. When you buy a physically replicated MSCI World ETF, the fund genuinely owns small amounts of all 1,600+ companies. This is the most transparent and straightforward structure. The alternative is synthetic replication using financial contracts.', highlight:'For beginners, physically replicated ETFs are simpler, more transparent and carry no counterparty risk. Always check the fund description for "physical" or "full replication" before buying.', example:'iShares Core MSCI World ETF (IWDA): Physical replication — the fund actually owns shares in all 1,600+ companies in the index. You can verify this in the fund\'s factsheet or KIID document.', quest:'Quest 16 — Reading an ETF Factsheet', questId:16 },
+
+  // R
+  { letter:'R', name:'Rebalancing', icon:'⚖️', short:'Restoring your target asset allocation after market drift', cat:'strategy', tags:['Strategy','Portfolio'], def:'Rebalancing is the practice of buying and selling assets to restore your portfolio to its original target allocation after market movements have caused it to drift. For example, if strong stock performance has pushed your portfolio from 80/20 stocks to bonds to 90/10, you would sell some stocks and buy bonds to restore the 80/20 balance. Annual rebalancing is sufficient for most investors.', highlight:'Rebalancing is not about optimizing returns — it is about maintaining your intended risk level. Without it, a strong bull market will silently make your portfolio far riskier than you originally chose.', example:'Most tax-efficient rebalancing method: instead of selling overweighted assets (which triggers capital gains tax), direct new savings contributions entirely toward the underweighted asset class until balance is restored.', quest:'Quest 113 — Portfolio Rebalancing Mastery', questId:113 },
+  { letter:'R', name:'REITs', icon:'🏢', short:'Real estate investment trusts — property without the mortgage', cat:'assets', tags:['Assets','Real Estate'], def:'A Real Estate Investment Trust (REIT) is a company that owns income-producing real estate — such as office buildings, apartments, shopping centers, hospitals or data centers. By law, REITs must distribute at least 90% of their taxable income to shareholders as dividends. This makes them high-dividend investments with real estate exposure available through regular stock exchanges.', highlight:'REITs offer real estate returns, high dividend yields and instant liquidity — you can sell your REIT ETF immediately, unlike selling a physical property which takes months.', example:'Types of REITs: Residential (apartments), Commercial (offices), Industrial (warehouses), Retail (shopping centers), Healthcare (hospitals, clinics), Infrastructure (cell towers, data centers, pipelines).', quest:'Quest 105 — REITs: Real Estate Without Buying Property', questId:105 },
+  { letter:'R', name:'Risk Tolerance', icon:'🎢', short:'How much investment loss you can emotionally handle', cat:'risk', tags:['Risk','Psychology'], def:'Risk tolerance is the degree of variability in investment returns that you are willing to accept — both financially (can you afford to lose this money?) and psychologically (can you sleep at night if your portfolio drops 30%?). Your true risk tolerance is often revealed only during actual market downturns, not during calm periods when everything looks good.', highlight:'A simple test: if your portfolio dropped 40% tomorrow, would you sell? If yes, your equity allocation is too high for your actual risk tolerance. Reduce it now, before the next crash.', example:'Stress test exercise: imagine your 100,000 euro portfolio drops to 60,000 euros (minus 40%). Can you hold without selling? If not, consider a more conservative allocation like 60% stocks and 40% bonds.', quest:'Quest 10 — Risk and Return', questId:10 },
+
+  // S
+  { letter:'S', name:'Savings Rate', icon:'💰', short:'The percentage of income you save and invest', cat:'strategy', tags:['Strategy','FIRE'], def:'Your savings rate is the percentage of your income that you save and invest rather than spend. A 10% savings rate is considered average, 20% is good and 30% or higher is exceptional. Your savings rate is arguably the most important variable in your wealth-building journey — especially early on when your portfolio is small and returns have limited impact.', highlight:'Increasing your savings rate from 10% to 20% does not just double your savings — it can more than halve the number of years until financial independence. Time is directly traded for a higher savings rate.', example:'On a 3,000 euro monthly income: 10% savings rate = 300 euros per month invested. 20% = 600 euros per month. 30% = 900 euros per month. The difference over 30 years at 7% is hundreds of thousands of euros.', quest:'Quest 17 — The Savings Rate: Your Most Powerful Tool', questId:17 },
+  { letter:'S', name:'Sparerpauschbetrag', icon:'🎁', short:'Annual 1,000 euro tax-free investment allowance in Germany', cat:'tax', tags:['Tax','Germany'], def:'The Sparerpauschbetrag is the annual tax-free allowance for investment income in Germany. Since 2023, it is 1,000 euros per person and 2,000 euros per couple per year. All capital gains, dividends and interest income below this threshold are completely free from Abgeltungsteuer. To benefit, you must submit a Freistellungsauftrag to each broker you use.', highlight:'This allowance is use-it-or-lose-it every year. If you do not set up your Freistellungsauftrag, your broker withholds tax from the first euro of investment income. This takes two minutes to set up and should be done immediately.', example:'In 2024, you earn 750 euros in dividends and 400 euros in capital gains = 1,150 euros total. With Sparerpauschbetrag set up, the first 1,000 euros is tax-free. You pay tax on only 150 euros.', quest:'Quest 15 — Tax Basics for ETF Investors', questId:15 },
+  { letter:'S', name:'Sequence of Returns Risk', icon:'🎲', short:'The danger of bad returns occurring early in retirement', cat:'risk', tags:['Risk','Retirement'], def:'Sequence of returns risk is the danger that the order in which investment returns occur can dramatically affect the sustainability of a retirement portfolio. Experiencing large negative returns early in retirement — while withdrawing money — can permanently damage a portfolio even if the average long-term returns are identical to a scenario where bad years come later.', highlight:'Two retirees with identical portfolios and identical average returns can have dramatically different outcomes based purely on when their bad years occur. Early bad years are devastating; late bad years are survivable.', example:'Retire with 500,000 euros. Year 1: minus 40% (portfolio becomes 280,000 after withdrawal). Year 2: minus 20% (portfolio becomes 214,000). Even a strong recovery cannot compensate for withdrawing from a severely depleted base.', quest:'Quest 117 — Sequence of Returns Risk', questId:117 },
+
+  // T
+  { letter:'T', name:'TER (Total Expense Ratio)', icon:'💸', short:'The annual cost of owning an ETF or fund', cat:'etf', tags:['ETF','Costs'], def:'The Total Expense Ratio is the annual cost of owning a fund, expressed as a percentage of your investment. This fee is automatically deducted from the fund daily — you never see it as a separate charge, which is why many investors ignore it. It includes management fees, administration costs and other operational expenses. The TER reduces your effective return by the stated percentage every year.', highlight:'The difference between a 0.07% TER and a 1.5% TER on a 100,000 euro portfolio over 30 years can exceed 100,000 euros in lost wealth. Always check the TER before buying any fund.', example:'Investor A: 100,000 euros in MSCI World ETF at TER 0.20% for 30 years at 7% gross return = approximately 720,000 euros. Investor B: same investment at TER 1.5% = approximately 540,000 euros. 180,000 euro difference from fees alone.', quest:'Quest 4 — Understanding TER: The Hidden Cost', questId:4 },
+  { letter:'T', name:'Tax-Loss Harvesting', icon:'🌾', short:'Selling investments at a loss to offset capital gains tax', cat:'tax', tags:['Tax','Advanced'], def:'Tax-loss harvesting is the practice of selling an investment that has decreased in value to realize a capital loss, which can then be used to offset capital gains on other investments — reducing your overall tax bill. Immediately after selling, you purchase a similar (but not identical) investment to maintain your market exposure. This is a legal and widely used tax optimization technique.', highlight:'Tax-loss harvesting does not eliminate taxes — it defers them. But tax deferral is powerful: money not paid in taxes today continues to compound for decades, creating significant additional wealth.', example:'You sell your MSCI World ETF at a 5,000 euro loss. Immediately, you buy an equivalent FTSE Developed World ETF. Your market exposure is maintained. The 5,000 euro loss can offset capital gains elsewhere, reducing your tax bill this year.', quest:'Quest 118 — Tax-Loss Harvesting', questId:118 },
+  { letter:'T', name:'3-Fund Portfolio', icon:'🗂️', short:'Three ETFs that cover the entire global investable world', cat:'strategy', tags:['Strategy','Portfolio'], def:'The 3-fund portfolio is a simple, elegant investment strategy that uses just three funds to cover virtually the entire global investable market: a developed markets fund (such as MSCI World), an emerging markets fund (such as MSCI Emerging Markets) and optionally a bond fund for stability. It requires minimal maintenance and has outperformed most complex strategies over the long term.', highlight:'Classic allocation for a growth investor: 80% MSCI World ETF plus 20% Emerging Markets ETF. This gives exposure to over 3,000 companies across 47 countries — more diversification than most professional portfolios.', example:'Annual rebalancing: if stocks have drifted from 80% to 85%, sell 5% of stocks and buy 5% of your underweight asset. This takes 15 minutes once a year and automatically forces you to buy low and sell high.', quest:'Quest 11 — The 3-Fund Portfolio', questId:11 },
+
+  // V
+  { letter:'V', name:'Volatility', icon:'📊', short:'How much an investment\'s value fluctuates over time', cat:'risk', tags:['Risk','Basics'], def:'Volatility measures how much the price of an investment fluctuates over a given period. High volatility means the price swings dramatically — up and down — while low volatility means relatively stable prices. Stocks are more volatile than bonds; individual stocks are more volatile than diversified index funds. Volatility is often measured by standard deviation.', highlight:'Short-term volatility is the price you pay for long-term returns. Historically, investors who tolerated short-term volatility by holding through downturns earned far higher returns than those who fled to safety.', example:'The MSCI World Index dropped 34% in 33 days during the COVID crash of 2020 — extreme volatility. Six months later, it had fully recovered. Investors who held (or bought more) profited enormously from this volatility.', quest:'Quest 10 — Risk and Return', questId:10 },
+
+  // W
+  { letter:'W', name:'World Map (ETF Highlands)', icon:'🗺️', short:'The investing RPG world you explore in Wealth Quest', cat:'basics', tags:['Wealth Quest','Game'], def:'The ETF Highlands is the first world in Wealth Quest — a fantasy region where each quest teaches one foundational investing concept. Complete all 25 quests to master the basics of ETF investing: from what an ETF is, to compound interest, diversification, costs, taxes and how to avoid the biggest investing mistakes. Then unlock Chapter II: Compound Sea.', highlight:'The world map visualises your progress through the curriculum. Completed quests glow green. Your current quest glows gold. Each node represents a real concept that will help you build actual wealth.', example:'Chapter I — ETF Highlands (25 quests): What is an ETF, Compound Interest, TER, Diversification, MSCI World, Dollar-Cost Averaging, Tax Basics and much more. Chapter II — Compound Sea (25 quests): FIRE, Factor Investing, REITs, Behavioral Finance and more.', quest:null, questId:null },
+
+  // X
+  { letter:'X', name:'XP (Experience Points)', icon:'⭐', short:'Points you earn for completing quests in Wealth Quest', cat:'basics', tags:['Wealth Quest','Game'], def:'XP (Experience Points) are earned by completing quests and daily challenges in Wealth Quest. They track your investing knowledge progress and unlock new levels and titles — from Novice to Apprentice, Investor, Strategist, Wealth Builder, ETF Master, Market Sage and finally Wealth Master. XP resets between levels, representing mastery at each stage.', highlight:'XP is not just a game mechanic — it mirrors real investing: consistent small actions compound over time into mastery. Each quest represents genuine knowledge that has real-world financial value.', example:'Quest 1 (What is an ETF?): +50 XP. Quest 5 (Compound Interest): +70 XP. Quest 25 (Chapter I Complete): +150 XP. Daily Quests: +25 XP each. Reaching Level 3 unlocks the Investor title.', quest:null, questId:null },
+];
+
+let activeCat = 'all';
+let activeSearch = '';
+
+function renderAll() {
+  const main = document.getElementById('mainContent');
+  const noResults = document.getElementById('noResults');
+  const searchCount = document.getElementById('searchCount');
+
+  let filtered = TERMS.filter(t => {
+    const matchCat = activeCat === 'all' || t.cat === activeCat;
+    const q = activeSearch.toLowerCase();
+    const matchSearch = !q || t.name.toLowerCase().includes(q) || t.short.toLowerCase().includes(q) || t.def.toLowerCase().includes(q) || t.tags.some(tag => tag.toLowerCase().includes(q));
+    return matchCat && matchSearch;
+  });
+
+  searchCount.textContent = filtered.length > 0 ? filtered.length + ' terms' : '';
+
+  if (filtered.length === 0) {
+    noResults.classList.add('show');
+    // Hide all letter groups
+    document.querySelectorAll('.letter-group').forEach(g => g.style.display = 'none');
+    return;
+  }
+  noResults.classList.remove('show');
+
+  // Group by letter
+  const byLetter = {};
+  filtered.forEach(t => {
+    if (!byLetter[t.letter]) byLetter[t.letter] = [];
+    byLetter[t.letter].push(t);
+  });
+
+  // Clear existing letter groups
+  document.querySelectorAll('.letter-group').forEach(g => g.remove());
+
+  Object.keys(byLetter).sort().forEach(letter => {
+    const group = document.createElement('div');
+    group.className = 'letter-group';
+    group.id = 'letter-' + letter;
+    group.innerHTML = '<div class="letter-heading">' + letter + '</div>';
+    byLetter[letter].forEach(term => {
+      group.appendChild(createTermCard(term));
+    });
+    main.appendChild(group);
+  });
+}
+
+function createTermCard(term) {
+  const card = document.createElement('div');
+  card.className = 'term-card';
+  card.innerHTML = `
+    <div class="term-header" onclick="toggleTerm(this.parentElement)">
+      <div class="term-icon">${term.icon}</div>
+      <div class="term-title-wrap">
+        <div class="term-name">${term.name}</div>
+        <div class="term-short">${term.short}</div>
+        <div class="term-tags">${term.tags.map(t => '<span class="term-tag">' + t + '</span>').join('')}</div>
+      </div>
+      <div class="term-chevron">▼</div>
+    </div>
+    <div class="term-body">
+      <div class="term-def">${term.def}</div>
+      <div class="term-highlight">${term.highlight}</div>
+      <div class="term-example"><strong>Example:</strong> ${term.example}</div>
+      ${term.questId ? '<a href="https://app.clearwealthai.com/quest/' + term.questId + '" class="term-cta" target="_blank">⚔️ Learn this in ' + term.quest + '</a>' : ''}
+    </div>
+  `;
+  return card;
+}
+
+function toggleTerm(card) {
+  card.classList.toggle('expanded');
+}
+
+function filterTerms() {
+  activeSearch = document.getElementById('searchInp').value;
+  // Remove existing groups and re-render
+  document.querySelectorAll('.letter-group').forEach(g => g.remove());
+  renderAll();
+}
+
+function filterCat(cat, btn) {
+  activeCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.letter-group').forEach(g => g.remove());
+  renderAll();
+}
+
+function toggleMenu() {
+  const m = document.getElementById('mob-menu');
+  const b = document.getElementById('burger');
+  m.classList.toggle('open');
+  b.textContent = m.classList.contains('open') ? '✕' : '☰';
+}
+document.addEventListener('click', e => {
+  const m = document.getElementById('mob-menu');
+  if (!e.target.closest('nav') && !e.target.closest('.mob-menu')) m.classList.remove('open');
+});
+
+// Initial render
+renderAll();
+</script>
+</body>
+</html>
